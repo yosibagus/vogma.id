@@ -61,7 +61,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-danger light"
                                                         data-bs-dismiss="modal">Close</button>
-                                                    <a href="/judul/{{ $get->nim }}/delete">
+                                                    <a href="/akses/{{ $get->id }}/delete">
                                                         <button type="button"
                                                             class="btn btn-primary light">Delete</button></a>
                                                 </div>

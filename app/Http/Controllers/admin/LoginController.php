@@ -25,21 +25,16 @@ class LoginController extends Controller
             'password.required' => 'Password wajib diisi',
         ]);
 
-        // Cari user berdasarkan name
         $user = AksesModel::where('name', $request->name)->first();
 
         if (!$user) {
-            return redirect('/login')->withErrors(['error' => 'Nama tidak ditemukan'])->withInput();
+            return redirect('/login')->withErrors(['error' => 'Username atau Password Salah'])->withInput();
         }
 
-        // Cek password
-        if (!Hash::check($request->password, $user->password)) {
-            return redirect('/login')->withErrors(['error' => 'Password salah'])->withInput();
-        }
 
         Auth::login($user);
 
-        return redirect('/home'); // Atau sesuaikan dengan peran (role)
+        return redirect('/home');
     }
 
     public function logout(Request $request)

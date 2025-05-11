@@ -16,7 +16,7 @@ class AksesController extends Controller
     }
     public function create()
     {
-        return view('Users.akses_user.akses_create');
+        return view('admin.akses_operator.akses_create');
     }
 
     public function store(Request $request)
@@ -36,32 +36,26 @@ class AksesController extends Controller
     public function edit($id)
     {
         $akun = AksesModel::where('id', $id)->first();
-        return view('Users.akses_user.akses_update', compact('akun'));
+        return view('admin.akses_operator.akses_edit', compact('akun'));
     }
 
     public function update($id, Request $request)
-    {
-        if (!empty($request->password)) {
-            $data = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role' => $request->role,
+{
 
-            ];
-        } else {
-            $data = [
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role' => $request->role,
+    $akun = AksesModel::findOrFail($id);
 
-            ];
-        }
+    $data = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->filled('password') ? bcrypt($request->password) : $akun->password,
+        'role' => $request->filled('role') ? $request->role : $akun->role,
+    ];
 
-        AksesModel::where('id', $id)->update($data);
-        return redirect('akses')->with('success', 'Akses Berhasil di Perbaharui');
-    }
+    $akun->update($data);
+
+    return redirect('akses')->with('success', 'Akses berhasil diperbaharui');
+}
+
 
     public function delete($id)
     {

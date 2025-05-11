@@ -4,7 +4,7 @@
             <div class="collapse navbar-collapse justify-content-between">
                 <div class="header-left">
                     <div class="dashboard_bar">
-                        Dashboard
+                       {{ ucwords(str_replace('-', ' ', Request::segment(1))) ?? 'Dashboard' }}
                     </div>
                 </div>
                 <ul class="navbar-nav header-right">
