@@ -11,7 +11,7 @@
     }
 </style>
 <ul class="metismenu" id="menu">
-    
+
     <li>
         <b class="">Utility</b>
     </li>
@@ -22,7 +22,7 @@
         </a>
     </li>
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/akses" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-settings-2"></i>
             <span class="nav-text">Operator</span>
         </a>
@@ -34,13 +34,13 @@
         <b class="">Vote</b>
     </li>
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/penyelenggara" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-briefcase"></i>
             <span class="nav-text">Penyelenggara</span>
         </a>
     </li>
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/event-acara" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-layer-1"></i>
             <span class="nav-text">Event (Acara)</span>
         </a>
