@@ -14,6 +14,7 @@ class AksesController extends Controller
         $no = 1;
         return view('admin.akses_operator.akses_view', compact('akun', 'no'));
     }
+    
     public function create()
     {
         return view('admin.akses_operator.akses_create');

@@ -19,8 +19,8 @@
                         <a class="nav-link" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">
                             <img src="{{ asset('xhtml') }}/images/profile/17.jpg" width="20" alt="">
                             <div class="header-info">
-                                <span class="text-black"><strong>Peter Parkur</strong></span>
-                                <p class="fs-12 mb-0">Super Admin</p>
+                                <span class="text-black"><strong>{{ Auth::user()->name }}</strong></span>
+                                <p class="fs-12 mb-0">{{ Auth::user()->role }}</p>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">

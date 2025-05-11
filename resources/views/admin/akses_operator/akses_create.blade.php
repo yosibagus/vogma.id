@@ -1,8 +1,6 @@
 @extends('admin.template.template')
 @section('content_admin')
 
-
-        <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-12 col-lg-12">
                     <div class="card">
@@ -45,7 +43,5 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
 @endsection
