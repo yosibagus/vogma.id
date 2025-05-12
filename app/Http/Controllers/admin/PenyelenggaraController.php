@@ -5,14 +5,23 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PenyelenggaraModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PenyelenggaraController extends Controller
 {
     public function index()
     {
+
         $no = 1;
-        $data = PenyelenggaraModel::all();
+        $user = Auth::user();
+
+        if ($user->role === 'admin') {
+            $data = PenyelenggaraModel::all();
+        } else {
+            $data = PenyelenggaraModel::where('id_penyelenggara', $user->id)->get();
+        }
+
         return view('admin.penyelenggara.penyelenggara_view', compact('data', 'no'));
     }
 

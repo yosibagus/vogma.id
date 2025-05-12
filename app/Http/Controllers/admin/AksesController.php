@@ -10,11 +10,11 @@ class AksesController extends Controller
 {
     public function index()
     {
-        $akun = AksesModel::where('id', '!=', 11)->get();
+        $akun = AksesModel::all();
         $no = 1;
         return view('admin.akses_operator.akses_view', compact('akun', 'no'));
     }
-    
+
     public function create()
     {
         return view('admin.akses_operator.akses_create');

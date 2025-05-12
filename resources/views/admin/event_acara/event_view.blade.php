@@ -4,9 +4,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Data Penyelenggara</h4>
-                    <a href="/penyelenggara/create">
-                        <button type="button" class="btn btn-primary">Add Data</button>
+                    <h4 class="card-title">Data Event</h4>
+                    <a href="/event-acara/create">
+                        <button type="button" class="btn btn-primary">Add Event</button>
                     </a>
                 </div>
                 <div class="card-body">
@@ -15,14 +15,11 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    {{-- @if (Auth::user()->role === 'admin')
-                                        <th>Username</th>
-                                    @endif --}}
-                                    <th></th>
-                                    <th>Nama </th>
-                                    <th>Email </th>
-                                    <th>Alamat </th>
-                                    <th>No HP</th>
+                                    <th>Nama Penyelenggara</th>
+                                    <th>Nama Event </th>
+                                    <th>Url Event </th>
+                                    <th>Lokasi </th>
+                                    <th>Harga</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -31,32 +28,23 @@
                                     <tr>
 
                                         <td>{{ $no++ }}</td>
-                                        {{-- @if (Auth::user()->role === 'admin')
-                                            <td>{{ $get->users->name ?? 'Tidak Diketahui' }}</td>
-                                        @endif --}}
-                                        <td>
-                                            <div style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%;">
-                                                <img src="{{ asset('storage/' . $get->logo_penyelenggara) }}"
-                                                    alt="Logo Penyelenggara"
-                                                    style="width: 100%; height: 100%; object-fit: cover;">
-                                            </div>
-                                        </td>
+                                        <td>{{ $get->penyelenggara->nama_penyelenggara }}</td>
+                                        <td>{{ $get->nama_event }}</td>
+                                        <td>{{ $get->url_event }}</td>
+                                        <td>{{ $get->lokasi_event }}</td>
+                                       <td>Rp {{ number_format($get->harga_event, 0, ',', '.') }}</td>
 
-                                        <td>{{ $get->nama_penyelenggara }}</td>
-                                        <td>{{ $get->email_penyelenggara }}</td>
-                                        <td>{{ $get->alamat_penyelenggara }}</td>
-                                        <td>{{ $get->nohp_penyelenggara }}</td>
 
                                         <td>
                                             <div class="d-flex">
-                                                <a href="/penyelenggara/{{ $get->id_penyelenggara }}/edit"
+                                                <a href="/event/{{ $get->id_event }}/edit"
                                                     class="btn btn-primary shadow btn-xs sharp me-1"><i
                                                         class="fa fa-pencil"></i></a>
 
 
-                                                <a href="/penyelenggara/{{ $get->id_penyelenggara }}/delete"
+                                                <a href="/event/{{ $get->id_event }}/delete"
                                                     class="btn btn-danger shadow btn-xs sharp" data-bs-toggle="modal"
-                                                    data-bs-target="#basicModal{{ $get->id_penyelenggara }}"><i
+                                                    data-bs-target="#basicModal{{ $get->id_event }}"><i
                                                         class="fa fa-trash"></i></a>
                                             </div>
                                         </td>
@@ -64,7 +52,7 @@
                                     </tr>
 
                                     <!-- Modal hapus -->
-                                    <div class="modal fade" id="basicModal{{ $get->id_penyelenggara }}" tabindex="-1">
+                                    <div class="modal fade" id="basicModal{{ $get->id_event }}" tabindex="-1">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -79,7 +67,7 @@
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-danger light"
                                                         data-bs-dismiss="modal">Close</button>
-                                                    <a href="/penyelenggara/{{ $get->id_penyelenggara }}/delete">
+                                                    <a href="/penyelenggara/{{ $get->id_event }}/delete">
                                                         <button type="button"
                                                             class="btn btn-primary light">Delete</button></a>
                                                 </div>

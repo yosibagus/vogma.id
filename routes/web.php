@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AksesController;
+use App\Http\Controllers\Admin\EventacaraController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PenyelenggaraController;
@@ -38,6 +39,17 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id_penyelenggara}/edit', [PenyelenggaraController::class, 'edit'])->name('penyelenggara.edit');
         Route::post('/{id_penyelenggara}/edit', [PenyelenggaraController::class, 'update'])->name('penyelenggara.update');
         Route::get('/{id_penyelenggara}/delete', [PenyelenggaraController::class, 'delete'])->name('penyelenggara.delete');
+    });
+
+
+    // Route untuk halaman event acara
+    Route::prefix('event-acara')->group(function () {
+        Route::get('/', [EventacaraController::class, 'index'])->name('event.index');
+        Route::get('/create', [EventacaraController::class, 'create'])->name('event.create');
+        Route::post('/create', [EventacaraController::class, 'store'])->name('event.store');
+        Route::get('/{id_event}/edit', [EventacaraController::class, 'edit'])->name('event.edit');
+        Route::post('/{id_event}/edit', [EventacaraController::class, 'update'])->name('event.update');
+        Route::get('/{id_event}/delete', [EventacaraController::class, 'delete'])->name('event.delete');
     });
 
 

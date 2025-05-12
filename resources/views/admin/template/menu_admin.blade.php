@@ -22,10 +22,12 @@
         </a>
     </li>
     <li>
-        <a href="/akses" class="ai-icon" aria-expanded="false">
-            <i class="flaticon-381-settings-2"></i>
-            <span class="nav-text">Operator</span>
-        </a>
+        @if (Auth::user()->role == 'admin')
+            <a href="/akses" class="ai-icon" aria-expanded="false">
+                <i class="flaticon-381-settings-2"></i>
+                <span class="nav-text">Operator</span>
+            </a>
+        @endif
     </li>
     <li>
         <hr class="hr-horizontal">
@@ -68,14 +70,16 @@
     </li>
 
     <li>
-        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-            <i class="flaticon-381-compact-disc-1"></i>
-            <span class="nav-text">Transaksi</span>
-        </a>
-       <ul aria-expanded="false">
-            <li><a href="flat-icons.html">Transaksi Event</a></li>
-            <li><a href="svg-icons.html">Semua Transaksi</a></li>
-        </ul>
+        @if (Auth::user()->role == 'admin')
+            <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                <i class="flaticon-381-compact-disc-1"></i>
+                <span class="nav-text">Transaksi</span>
+            </a>
+            <ul aria-expanded="false">
+                <li><a href="flat-icons.html">Transaksi Event</a></li>
+                <li><a href="svg-icons.html">Semua Transaksi</a></li>
+            </ul>
+        @endif
     </li>
 
 </ul>
