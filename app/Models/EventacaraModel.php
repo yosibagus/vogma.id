@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\participation;
 
 class EventacaraModel extends Model
 {
-      use HasFactory;
+    use HasFactory;
 
     protected $table = 'event';
     protected $primaryKey = 'id_event';
@@ -25,9 +27,11 @@ class EventacaraModel extends Model
         'penyelenggara_id',
     ];
 
-   
+
     public function penyelenggara()
     {
         return $this->belongsTo(PenyelenggaraModel::class, 'penyelenggara_id', 'id_penyelenggara');
     }
+
+
 }

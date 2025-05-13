@@ -32,6 +32,7 @@ class PenyelenggaraController extends Controller
 
     public function store(Request $request)
     {
+        $user = Auth::user();
         $request->validate([
             'nama_penyelenggara' => 'required|string|max:255',
             'logo_penyelenggara' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
@@ -46,6 +47,8 @@ class PenyelenggaraController extends Controller
             'email_penyelenggara',
 
         ]);
+
+         $validatedData['id_penyelenggara'] = $user->id;
 
         // Upload logo
         if ($request->hasFile('logo_penyelenggara')) {

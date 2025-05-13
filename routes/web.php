@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AksesController;
 use App\Http\Controllers\Admin\EventacaraController;
+use App\Http\Controllers\Admin\FinalisController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PenyelenggaraController;
@@ -51,6 +52,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{id_event}/edit', [EventacaraController::class, 'update'])->name('event.update');
         Route::get('/{id_event}/delete', [EventacaraController::class, 'delete'])->name('event.delete');
     });
+
+
+    // Route untuk halaman finalis
+    Route::prefix('finalis')->group(function () {
+        Route::get('/', [FinalisController::class, 'index'])->name('finalis.index');
+        Route::get('/create', [FinalisController::class, 'create'])->name('finalis.create');
+        Route::post('/create', [FinalisController::class, 'store'])->name('finalis.store');
+        Route::get('/{id_kandidat}/edit', [FinalisController::class, 'edit'])->name('finalis.edit');
+        Route::post('/{id_kandidat}/edit', [FinalisController::class, 'update'])->name('finalis.update');
+        Route::get('/{id_kandidat}/delete', [FinalisController::class, 'delete'])->name('finalis.delete');
+    });
+
 
 
     // Route untuk logout

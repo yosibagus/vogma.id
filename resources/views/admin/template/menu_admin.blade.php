@@ -48,7 +48,7 @@
         </a>
     </li>
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/finalis" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-user-2"></i>
             <span class="nav-text">Finalis</span>
         </a>
