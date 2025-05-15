@@ -9,20 +9,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class EventacaraController extends Controller
 {
     public function index()
     {
         $no = 1;
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $data = EventacaraModel::all();
-        } else {
-            $data = EventacaraModel::where('penyelenggara_id', $user->id)->get();
-        }
-
+        $data = EventacaraModel::with('penyelenggara')->get();
         return view('admin.event.event_acara.event_view', compact('data', 'no'));
     }
 
@@ -34,8 +28,10 @@ class EventacaraController extends Controller
 
     public function store(Request $request)
     {
-
-        $user = Auth::user();
+        // Generate slug dari nama_event
+        $request->merge([
+            'url_event' => Str::slug($request->nama_event),
+        ]);
 
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
@@ -47,23 +43,15 @@ class EventacaraController extends Controller
             'deskripsi_event' => 'nullable|string',
             'max_vote' => 'nullable|integer|min:1',
             'benner_event' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
         ]);
 
-        // Jika admin, wajib input penyelenggara_id
-        if ($user->role === 'admin') {
-            $request->validate([
-                'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
-            ]);
-            $validatedData['penyelenggara_id'] = $request->input('penyelenggara_id');
-        } elseif ($user->role === 'penyelenggara') {
-            $validatedData['penyelenggara_id'] = $user->id;
-        }
-
-        // Handle upload file jika ada
+        // Upload file banner jika ada
         if ($request->hasFile('benner_event')) {
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('banners', $fileName, 'public');
+            // simpan ke storage/app/public/uploads/
+            $filePath = $file->storeAs('uploads/banner', $fileName, 'public');
             $validatedData['benner_event'] = $filePath;
         }
 
@@ -76,7 +64,6 @@ class EventacaraController extends Controller
         }
     }
 
-
     public function edit($id_event)
     {
         $event = EventacaraModel::findOrFail($id_event);
@@ -86,6 +73,9 @@ class EventacaraController extends Controller
 
     public function update(Request $request, $id_event)
     {
+        $request->merge([
+            'url_event' => Str::slug($request->nama_event),
+        ]);
 
         $event = EventacaraModel::findOrFail($id_event);
 
@@ -99,6 +89,7 @@ class EventacaraController extends Controller
             'deskripsi_event' => 'nullable|string',
             'max_vote' => 'nullable|integer|min:1',
             'benner_event' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
         ]);
 
         $data = $request->only([
@@ -110,20 +101,22 @@ class EventacaraController extends Controller
             'harga_event',
             'deskripsi_event',
             'max_vote',
+            'penyelenggara_id',
         ]);
 
+        // Update banner jika diupload ulang
         if ($request->hasFile('benner_event')) {
-
+            // Hapus banner lama jika ada
             if ($event->benner_event) {
                 Storage::disk('public')->delete($event->benner_event);
             }
 
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('banners', $fileName, 'public');
+            // simpan ke storage/app/public/uploads/
+            $filePath = $file->storeAs('uploads/banner', $fileName, 'public');
             $data['benner_event'] = $filePath;
         } else {
-
             $data['benner_event'] = $event->benner_event;
         }
 
@@ -136,7 +129,7 @@ class EventacaraController extends Controller
     {
         $event = EventacaraModel::findOrFail($id_event);
 
-
+        // Hapus file banner dari storage jika ada
         if ($event->benner_event) {
             Storage::disk('public')->delete($event->benner_event);
         }

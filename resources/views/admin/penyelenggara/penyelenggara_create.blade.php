@@ -13,19 +13,6 @@
                             class="needs-validation" novalidate>
                             @csrf
                             <div class="row">
-                                <div class="form-group col-md-6 mb-3">
-                                    <label for="validationNama" class="form-label">Pilih User Penyelenggara <span
-                                            class="text-danger">*</span></label>
-                                    <select name="user_id" id="validationNama" class="form-control" required>
-                                        <option value="" disabled selected>Pilih Penyelenggara</option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}">
-                                                {{ $user->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <div class="invalid-feedback">Silahkan pilih user penyelenggara.</div>
-                                </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label for="validationNama" class="form-label">Nama Penyelenggara <span
@@ -72,6 +59,7 @@
                                         accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     <div class="invalid-feedback">Masukkan file NPWP yang sesuai.</div>
                                 </div>
+
                             </div>
 
                             <div class="mb-4">
@@ -91,12 +79,12 @@
                                 </div>
                             </div>
 
-
                             <div class="d-flex justify-content-start gap-2 mt-4">
                                 <a href="{{ url('/penyelenggara') }}" class="btn btn-danger">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Simpan</button>
                             </div>
                         </form>
+
 
 
                     </div>

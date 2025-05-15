@@ -13,25 +13,20 @@
                             @csrf
                             <div class="row needs-validation" novalidate>
 
-                                {{-- Pilih Event --}}
-                                @if (Auth::user()->role === 'admin')
-                                    <div class="form-group col-md-6 mb-3">
-                                        <label for="event_id" class="form-label">Pilih Event <span
-                                                class="text-danger">*</span></label>
-                                        <select name="event_id" id="event_id" class="form-control" required>
-                                            <option value="" disabled selected>Pilih Event</option>
-                                            @foreach ($events as $event)
-                                                <option value="{{ $event->id_event }}"
-                                                    {{ old('event_id') == $event->id_event ? 'selected' : '' }}>
-                                                    {{ $event->nama_event }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">Event wajib dipilih.</div>
-                                    </div>
-                                @else
-                                    <input type="hidden" name="event_id" value="{{ Auth::user()->event_id }}">
-                                @endif
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="event_id" class="form-label">Pilih Event <span
+                                            class="text-danger">*</span></label>
+                                    <select name="event_id" id="event_id" class="form-control" required>
+                                        <option value="" disabled selected>Pilih Event</option>
+                                        @foreach ($events as $event)
+                                            <option value="{{ $event->id_event }}"
+                                                {{ old('event_id') == $event->id_event ? 'selected' : '' }}>
+                                                {{ $event->nama_event }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Event wajib dipilih.</div>
+                                </div>
 
                                 {{-- Nomor Kandidat --}}
                                 <div class="form-group col-md-6 mb-3">

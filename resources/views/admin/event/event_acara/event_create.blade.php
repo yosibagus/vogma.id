@@ -1,34 +1,41 @@
 @extends('admin.template.template')
 @section('content_admin')
     <div class="row">
+        @if ($errors->any())
+            <div class="alert alert-danger mt-2">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col-xl-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Form Tambah Event</h4>
                 </div>
+
                 <div class="card-body">
                     <div class="basic-form">
                         <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="row needs-validation" novalidate>
 
-                                @if (Auth::user()->role === 'admin')
-                                    <div class="form-group col-md-6 mb-3">
-                                        <label for="validationNama" class="form-label">Nama Penyelenggara <span
-                                                class="text-danger">*</span></label>
-                                        <select name="penyelenggara_id" id="validationNama" class="form-control" required>
-                                            <option value="" disabled selected>Pilih Penyelenggara</option>
-                                            @foreach ($penyelenggaras as $penyelenggara)
-                                                <option value="{{ $penyelenggara->id_penyelenggara }}">
-                                                    {{ $penyelenggara->nama_penyelenggara }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">Nama Penyelenggara wajib dipilih.</div>
-                                    </div>
-                                @else
-                                    <input type="hidden" name="penyelenggara_id" value="{{ Auth::user()->id }}">
-                                @endif
+                            <div class="row needs-validation" novalidate>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="validationNama" class="form-label">Nama Penyelenggara <span
+                                            class="text-danger">*</span></label>
+                                    <select name="penyelenggara_id" id="validationNama" class="form-control" required>
+                                        <option value="" disabled selected>Pilih Penyelenggara</option>
+                                        @foreach ($penyelenggaras as $penyelenggara)
+                                            <option value="{{ $penyelenggara->id_penyelenggara }}">
+                                                {{ $penyelenggara->nama_penyelenggara }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Nama Penyelenggara wajib dipilih.</div>
+                                </div>
+
 
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="validationEvent" class="form-label">Nama Event <span
@@ -36,14 +43,6 @@
                                     <input type="text" name="nama_event" id="validationEvent" class="form-control"
                                         placeholder="Masukkan Nama Event" required>
                                     <div class="invalid-feedback">Nama Event wajib diisi.</div>
-                                </div>
-
-                                <div class="form-group col-md-6 mb-3">
-                                    <label for="validationUrl" class="form-label">URL Event <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="url_event" id="validationUrl" class="form-control"
-                                        placeholder="Contoh: voting-pemuda-2025" required>
-                                    <div class="invalid-feedback">URL Event wajib diisi.</div>
                                 </div>
 
                                 <div class="form-group col-md-3 mb-3">
@@ -145,5 +144,4 @@
             reader.readAsDataURL(event.target.files[0]);
         }
     </script>
-
 @endsection

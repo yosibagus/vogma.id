@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\AksesModel;
 use App\Models\PenyelenggaraModel;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class PenyelenggaraController extends Controller
@@ -14,32 +13,19 @@ class PenyelenggaraController extends Controller
     public function index()
     {
         $no = 1;
-        $user = Auth::user();
-
-        if ($user->role === 'admin') {
-            $data = PenyelenggaraModel::all();
-        } else {
-            $data = PenyelenggaraModel::where('id_penyelenggara', $user->id)->get();
-        }
-
+        $data = PenyelenggaraModel::all();
         return view('admin.penyelenggara.penyelenggara_view', compact('data', 'no'));
     }
 
     public function create()
     {
-        // Ambil semua id user yang sudah digunakan sebagai penyelenggara
-        $sudahDipakai = PenyelenggaraModel::pluck('id_penyelenggara')->toArray();
 
-        // Ambil user dari AksesModel yang belum menjadi penyelenggara
-        $users = AksesModel::whereNotIn('id', $sudahDipakai)->get();
-
-        return view('admin.penyelenggara.penyelenggara_create', compact('users'));
+        return view('admin.penyelenggara.penyelenggara_create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
             'nama_penyelenggara' => 'required|string|max:255',
             'logo_penyelenggara' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
             'dokumen_ktp' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
@@ -53,24 +39,25 @@ class PenyelenggaraController extends Controller
             'email_penyelenggara',
         ]);
 
-        $data['id_penyelenggara'] = $request->user_id;
-
+        // Simpan logo ke folder public
         if ($request->hasFile('logo_penyelenggara')) {
-            $data['logo_penyelenggara'] = $request->file('logo_penyelenggara')->store('data_penyelenggara', 'public');
+            $data['logo_penyelenggara'] = $request->file('logo_penyelenggara')->store('uploads/logo_penyelenggara', 'public');
         }
 
+        // Simpan dokumen ke folder private
         if ($request->hasFile('dokumen_ktp')) {
-            $data['dokumen_ktp'] = $request->file('dokumen_ktp')->store('data_penyelenggara', 'public');
+            $data['dokumen_ktp'] = $request->file('dokumen_ktp')->store('dokumen/ktp');
         }
 
         if ($request->hasFile('dokumen_npwp')) {
-            $data['dokumen_npwp'] = $request->file('dokumen_npwp')->store('data_penyelenggara', 'public');
+            $data['dokumen_npwp'] = $request->file('dokumen_npwp')->store('dokumen/npwp');
         }
 
         PenyelenggaraModel::create($data);
 
         return redirect()->route('penyelenggara.index')->with('success', 'Penyelenggara berhasil ditambahkan');
     }
+
 
     public function edit($id_penyelenggara)
     {
@@ -85,8 +72,8 @@ class PenyelenggaraController extends Controller
         $request->validate([
             'nama_penyelenggara' => 'required|string|max:255',
             'logo_penyelenggara' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            'dokumen_ktp' => 'nullable|mimes:pdf,file,word,jpg,jpeg,png|max:2048',
-            'dokumen_npwp' => 'nullable|mimes:pdf,file.word,jpg,jpeg,png|max:2048',
+            'dokumen_ktp' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'dokumen_npwp' => 'nullable|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
         ]);
 
         $data = $request->only([
@@ -96,37 +83,35 @@ class PenyelenggaraController extends Controller
             'email_penyelenggara',
         ]);
 
+        // Logo (public)
         if ($request->hasFile('logo_penyelenggara')) {
             if ($penyelenggara->logo_penyelenggara) {
-                Storage::disk('public')->delete($penyelenggara->logo_penyelenggara);
+                Storage::disk('public/upload')->delete($penyelenggara->logo_penyelenggara);
             }
-            $data['logo_penyelenggara'] = $request->file('logo_penyelenggara')->store('data_penyelenggara', 'public');
-        } else {
-            $data['logo_penyelenggara'] = $penyelenggara->logo_penyelenggara;
+            $data['logo_penyelenggara'] = $request->file('logo_penyelenggara')->store('logo_penyelenggara', 'public');
         }
 
+        // Dokumen KTP (private)
         if ($request->hasFile('dokumen_ktp')) {
             if ($penyelenggara->dokumen_ktp) {
-                Storage::disk('public')->delete($penyelenggara->dokumen_ktp);
+                Storage::delete($penyelenggara->dokumen_ktp); // disk default (private)
             }
-            $data['dokumen_ktp'] = $request->file('dokumen_ktp')->store('data_penyelenggara', 'public');
-        } else {
-            $data['dokumen_ktp'] = $penyelenggara->dokumen_ktp;
+            $data['dokumen_ktp'] = $request->file('dokumen_ktp')->store('dokumen/ktp');
         }
 
+        // Dokumen NPWP (private)
         if ($request->hasFile('dokumen_npwp')) {
             if ($penyelenggara->dokumen_npwp) {
-                Storage::disk('public')->delete($penyelenggara->dokumen_npwp);
+                Storage::delete($penyelenggara->dokumen_npwp); // disk default (private)
             }
-            $data['dokumen_npwp'] = $request->file('dokumen_npwp')->store('data_penyelenggara', 'public');
-        } else {
-            $data['dokumen_npwp'] = $penyelenggara->dokumen_npwp;
+            $data['dokumen_npwp'] = $request->file('dokumen_npwp')->store('dokumen/npwp');
         }
 
         $penyelenggara->update($data);
 
         return redirect()->route('penyelenggara.index')->with('success', 'Data berhasil diperbarui');
     }
+
 
     public function delete($id)
     {
@@ -147,5 +132,22 @@ class PenyelenggaraController extends Controller
         $penyelenggara->delete();
 
         return redirect()->route('penyelenggara.index')->with('success', 'Data berhasil dihapus');
+    }
+
+    public function lihatDokumen($id, $tipe)
+    {
+        $penyelenggara = PenyelenggaraModel::findOrFail($id);
+
+        if (!in_array($tipe, ['ktp', 'npwp'])) {
+            abort(404);
+        }
+
+        $path = $tipe === 'ktp' ? $penyelenggara->dokumen_ktp : $penyelenggara->dokumen_npwp;
+
+        if (!$path || !Storage::exists($path)) {
+            abort(404, 'Dokumen tidak ditemukan');
+        }
+
+        return Storage::response($path); // Atau: return Storage::response($path); untuk tampil di browser
     }
 }

@@ -45,7 +45,7 @@
                                         type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     @if ($data->dokumen_ktp)
                                         <small class="text-muted">Dokumen lama:
-                                            <a href="{{ asset('storage/' . $data->dokumen_ktp) }}" target="_blank">Lihat
+                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'ktp']) }}" target="_blank">Lihat
                                                 KTP</a>
                                         </small>
                                     @endif
@@ -58,7 +58,7 @@
                                         type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     @if ($data->dokumen_npwp)
                                         <small class="text-muted">Dokumen lama:
-                                            <a href="{{ asset('storage/' . $data->dokumen_npwp) }}" target="_blank">Lihat
+                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'npwp']) }}" target="_blank">Lihat
                                                 NPWP</a>
                                         </small>
                                     @endif
@@ -85,14 +85,6 @@
                                                 onchange="previewImage(event, 'logoPreview')">
                                             <label for="logoUpload" class="btn btn-sm btn-primary mt-1">Pilih Logo</label>
                                         </div>
-
-                                        {{-- Link Logo Saat Ini --}}
-                                        @if ($data->logo_penyelenggara)
-                                            <small class="text-muted mt-2">Logo saat ini:
-                                                <a href="{{ asset('storage/' . $data->logo_penyelenggara) }}"
-                                                    target="_blank">Lihat Logo</a>
-                                            </small>
-                                        @endif
                                     </div>
                                 </div>
 

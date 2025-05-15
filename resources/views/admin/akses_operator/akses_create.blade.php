@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <div class="basic-form">
                         <form action="" method="POST" enctype="multipart/form-data">
-                      
+
                             @error('email')
                                 <div class="alert alert-danger alert-dismissible fade show mt-2">
                                     <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor"
@@ -52,10 +52,10 @@
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
                             <a href="/akses">
                                 <button type="button" class="btn btn-danger">kembali</button>
                             </a>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>
                 </div>

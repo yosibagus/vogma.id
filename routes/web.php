@@ -41,6 +41,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id_penyelenggara}/edit', [PenyelenggaraController::class, 'edit'])->name('penyelenggara.edit');
         Route::post('/{id_penyelenggara}/edit', [PenyelenggaraController::class, 'update'])->name('penyelenggara.update');
         Route::get('/{id_penyelenggara}/delete', [PenyelenggaraController::class, 'delete'])->name('penyelenggara.delete');
+        Route::get('/penyelenggara/dokumen/{id}/{tipe}', [PenyelenggaraController::class, 'lihatDokumen'])->name('penyelenggara.dokumen');
+
     });
 
 
