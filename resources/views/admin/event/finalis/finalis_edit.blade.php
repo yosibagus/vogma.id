@@ -56,24 +56,29 @@
                                             <div class="position-relative">
                                                 <div class="avatar-preview">
                                                     <div id="imagePreview"
-                                                        style="background-image: url('{{ $finalis->foto_kandidat ? asset('storage/' . $finalis->foto_kandidat) : asset('images/no-img-avatar.png') }}');
-                            background-size: cover;
-                            background-position: center;
-                            width: 100px;
-                            height: 100px;
-                            border-radius: 10px;">
+                                                        style="background-image: url('{{ $finalis->foto_kandidat ? asset($finalis->foto_kandidat) : asset('images/no-img-avatar.png') }}');
+                        background-size: cover;
+                        background-position: center;
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 10px;
+                        border: 1px solid #ccc;">
                                                     </div>
                                                 </div>
                                                 <div class="change-btn d-flex align-items-center flex-wrap mt-2">
                                                     <input type="file" class="form-control d-none" id="imageUpload"
                                                         name="foto_kandidat" accept=".png, .jpg, .jpeg"
                                                         onchange="previewImageUpload(event)">
-                                                    <label for="imageUpload" class="btn btn-primary ms-0">Update Foto</label>
+                                                    <label for="imageUpload" class="btn btn-primary ms-0">Update
+                                                        Foto</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+
                             </div>
 
                             <div class="d-flex flex-wrap justify-content-start gap-2 mt-4">
@@ -90,3 +95,14 @@
         </div>
     </div>
 @endsection
+
+<script>
+    function previewImageUpload(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('imagePreview');
+            output.style.backgroundImage = `url(${reader.result})`;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

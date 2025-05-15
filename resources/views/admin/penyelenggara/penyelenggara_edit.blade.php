@@ -45,7 +45,8 @@
                                         type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     @if ($data->dokumen_ktp)
                                         <small class="text-muted">Dokumen lama:
-                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'ktp']) }}" target="_blank">Lihat
+                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'ktp']) }}"
+                                                target="_blank">Lihat
                                                 KTP</a>
                                         </small>
                                     @endif
@@ -58,7 +59,8 @@
                                         type="file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     @if ($data->dokumen_npwp)
                                         <small class="text-muted">Dokumen lama:
-                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'npwp']) }}" target="_blank">Lihat
+                                            <a href="{{ route('penyelenggara.dokumen', ['id' => $data->id_penyelenggara, 'tipe' => 'npwp']) }}"
+                                                target="_blank">Lihat
                                                 NPWP</a>
                                         </small>
                                     @endif
@@ -70,13 +72,14 @@
                                     <div class="d-flex flex-column align-items-start">
                                         {{-- Preview Logo --}}
                                         <div id="logoPreview"
-                                            style="background-image: url('{{ $data->logo_penyelenggara ? asset('storage/' . $data->logo_penyelenggara) : asset('images/no-img-avatar.png') }}');
-                                        width: 100px; height: 100px;
-                                        border-radius: 10px;
-                                         background-size: cover;
-                                        background-position: center;
-                                        border: 1px solid #ccc;">
+                                            style="background-image: url('{{ $data->logo_penyelenggara ? asset('upload/logo_penyelenggara/' . basename($data->logo_penyelenggara)) : asset('images/no-img-avatar.png') }}');
+            width: 100px; height: 100px;
+            border-radius: 10px;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #ccc;">
                                         </div>
+
 
                                         {{-- Input File & Label --}}
                                         <div class="mt-2">

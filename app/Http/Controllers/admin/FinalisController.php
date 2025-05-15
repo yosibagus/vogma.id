@@ -37,18 +37,14 @@ class FinalisController extends Controller
         if ($request->hasFile('foto_kandidat')) {
             $file = $request->file('foto_kandidat');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads/kandidat', $fileName, 'public');
-            $validatedData['foto_kandidat'] = $filePath;
+            $file->move(public_path('upload/foto kandidat'), $fileName);
+            $validatedData['foto_kandidat'] = 'upload/foto kandidat/' . $fileName;
         }
 
-        try {
-            FinalisModel::create($validatedData);
-            return redirect()->route('finalis.index')->with('success', 'Kandidat berhasil ditambahkan.');
-        } catch (\Exception $e) {
-            Log::error('Gagal menyimpan kandidat: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan kandidat.')->withInput();
-        }
+        FinalisModel::create($validatedData);
+        return redirect()->route('finalis.index')->with('success', 'Kandidat berhasil ditambahkan.');
     }
+
 
     public function edit($id_kandidat)
     {
@@ -69,11 +65,16 @@ class FinalisController extends Controller
             'event_id' => 'required|exists:event,id_event',
         ]);
 
+        // Hapus foto lama jika ada dan file baru diupload
         if ($request->hasFile('foto_kandidat')) {
+            if ($data->foto_kandidat && file_exists(public_path($data->foto_kandidat))) {
+                unlink(public_path($data->foto_kandidat));
+            }
+
             $file = $request->file('foto_kandidat');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('uploads/kandidat', $fileName, 'public');
-            $validatedData['foto_kandidat'] = $filePath;
+            $file->move(public_path('upload/foto kandidat'), $fileName);
+            $validatedData['foto_kandidat'] = 'upload/foto kandidat/' . $fileName;
         }
 
         $data->update($validatedData);
@@ -81,16 +82,16 @@ class FinalisController extends Controller
         return redirect()->route('finalis.index')->with('success', 'Kandidat berhasil diperbarui.');
     }
 
+
     public function delete($id_kandidat)
     {
         $finalis = FinalisModel::findOrFail($id_kandidat);
 
-        // Hapus foto dari storage jika ada
-        if ($finalis->foto_kandidat && Storage::disk('public')->exists($finalis->foto_kandidat)) {
-            Storage::disk('public')->delete($finalis->foto_kandidat);
+        // Hapus foto dari folder public jika ada
+        if ($finalis->foto_kandidat && file_exists(public_path($finalis->foto_kandidat))) {
+            unlink(public_path($finalis->foto_kandidat));
         }
 
-        // Hapus data dari database
         $finalis->delete();
 
         return redirect()->route('finalis.index')->with('success', 'Kandidat dan foto berhasil dihapus.');
