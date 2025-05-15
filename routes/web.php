@@ -20,4 +20,4 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class, 'index']);
-Route::get('/beranda', [BerandaController::class, 'index']);
+Route::get('/', [BerandaController::class, 'index']);
