@@ -8,10 +8,28 @@
                 </div>
                 <div class="card-body">
                     <div class="basic-form">
-                        <form action="" method="POST" enctype="multipart/form-data">
+
+                        <form action="{{ route('penyelenggara.store') }}" method="POST" enctype="multipart/form-data"
+                            class="needs-validation" novalidate>
                             @csrf
-                            <div class="row needs-validation" novalidate>
-                                <div class="form-group col-md-6 mb-3">
+
+                            {{-- Pilih User --}}
+                            <div class="mb-3">
+                                <label for="user_id" class="form-label">Pilih User Penyelenggara <span
+                                        class="text-danger">*</span></label>
+                                <select name="user_id" id="user_id" class="form-select" required>
+                                    <option value="">Pilih User</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }} 
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="invalid-feedback">Silakan pilih user penyelenggara.</div>
+                            </div>
+
+                            <div class="row">
+                                {{-- Nama --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationNama" class="form-label">Nama Penyelenggara <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="nama_penyelenggara" id="validationNama" class="form-control"
@@ -19,7 +37,8 @@
                                     <div class="invalid-feedback">Nama Penyelenggara wajib diisi.</div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
+                                {{-- Alamat --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationAlamat" class="form-label">Alamat Penyelenggara <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="alamat_penyelenggara" id="validationAlamat"
@@ -27,7 +46,8 @@
                                     <div class="invalid-feedback">Alamat wajib diisi.</div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
+                                {{-- No HP --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationNoHp" class="form-label">No HP <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="nohp_penyelenggara" id="validationNoHp" class="form-control"
@@ -35,7 +55,8 @@
                                     <div class="invalid-feedback">No HP wajib diisi.</div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
+                                {{-- Email --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationEmail" class="form-label">Email <span
                                             class="text-danger">*</span></label>
                                     <input type="email" name="email_penyelenggara" id="validationEmail"
@@ -43,37 +64,64 @@
                                     <div class="invalid-feedback">Email wajib diisi dengan format yang valid.</div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
-                                    <label for="validationLogo" class="form-label">Logo Penyelenggara</label>
-                                    <input type="file" name="logo_penyelenggara" id="validationLogo"
-                                        class="form-control form-control-sm" accept="image/*">
-                                    <div class="invalid-feedback">Logo harus berupa gambar (jpg, jpeg, png).</div>
-                                </div>
-
-                                <div class="form-group col-md-6 mb-3">
+                                {{-- Dokumen KTP --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationKTP" class="form-label">Dokumen KTP</label>
-                                    <input type="file" name="dokumen_ktp" id="validationKTP"
-                                        class="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                    <input type="file" name="dokumen_ktp" id="validationKTP" class="form-control"
+                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     <div class="invalid-feedback">Masukkan file KTP yang sesuai.</div>
                                 </div>
 
-                                <div class="form-group col-md-6 mb-3">
+                                {{-- Dokumen NPWP --}}
+                                <div class="col-md-6 mb-3">
                                     <label for="validationNPWP" class="form-label">Dokumen NPWP</label>
-                                    <input type="file" name="dokumen_npwp" id="validationNPWP"
-                                        class="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+                                    <input type="file" name="dokumen_npwp" id="validationNPWP" class="form-control"
+                                        accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
                                     <div class="invalid-feedback">Masukkan file NPWP yang sesuai.</div>
                                 </div>
                             </div>
 
-                            <a href="/penyelenggara">
-                                <button type="button" class="btn btn-danger">kembali</button>
-                            </a>
-                            
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            {{-- Logo Penyelenggara --}}
+                            <div class="mb-4">
+                                <label class="form-label">Logo Penyelenggara</label>
+                                <div class="d-flex align-items-center">
+                                    <div class="position-relative me-3">
+                                        <div id="logoPreview"
+                                            style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); background-size: cover; background-position: center; width: 100px; height: 100px; border-radius: 10px;">
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <input type="file" class="form-control d-none" id="logoUpload"
+                                            name="logo_penyelenggara" accept=".png, .jpg, .jpeg"
+                                            onchange="previewImage(event, 'logoPreview')">
+                                        <label for="logoUpload" class="btn btn-primary">Pilih Logo</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Tombol --}}
+                            <div class="d-flex justify-content-start gap-2 mt-4">
+                                <a href="{{ url('/penyelenggara') }}" class="btn btn-danger">Kembali</a>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
                         </form>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+{{-- JS Preview Image --}}
+<script>
+    function previewImage(event, previewId) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const preview = document.getElementById(previewId);
+            preview.style.backgroundImage = `url('${reader.result}')`;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>

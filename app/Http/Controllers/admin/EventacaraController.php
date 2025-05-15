@@ -7,6 +7,7 @@ use App\Models\EventacaraModel;
 use App\Models\PenyelenggaraModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class EventacaraController extends Controller
@@ -22,13 +23,13 @@ class EventacaraController extends Controller
             $data = EventacaraModel::where('penyelenggara_id', $user->id)->get();
         }
 
-        return view('admin.event_acara.event_view', compact('data', 'no'));
+        return view('admin.event.event_acara.event_view', compact('data', 'no'));
     }
 
     public function create()
     {
         $penyelenggaras = PenyelenggaraModel::all();
-        return view('admin.event_acara.event_create', compact('penyelenggaras'));
+        return view('admin.event.event_acara.event_create', compact('penyelenggaras'));
     }
 
     public function store(Request $request)
@@ -36,7 +37,7 @@ class EventacaraController extends Controller
         // Ambil user yang sedang login
         $user = Auth::user();
 
-        // Validasi input TANPA penyelenggara_id
+        // Validasi umum
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
             'url_event' => 'required|string|max:255|unique:event,url_event',
@@ -49,8 +50,15 @@ class EventacaraController extends Controller
             'benner_event' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // Tambahkan penyelenggara_id dari user yang login
-        $validatedData['penyelenggara_id'] = $user->id;
+        // Jika admin, wajib input penyelenggara_id
+        if ($user->role === 'admin') {
+            $request->validate([
+                'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
+            ]);
+            $validatedData['penyelenggara_id'] = $request->input('penyelenggara_id');
+        } elseif ($user->role === 'penyelenggara') {
+            $validatedData['penyelenggara_id'] = $user->id;
+        }
 
         // Handle upload file jika ada
         if ($request->hasFile('benner_event')) {
@@ -60,17 +68,21 @@ class EventacaraController extends Controller
             $validatedData['benner_event'] = $filePath;
         }
 
-        // Simpan data ke database
-        EventacaraModel::create($validatedData);
-
-        return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
+        try {
+            EventacaraModel::create($validatedData);
+            return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menyimpan event: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan event.');
+        }
     }
+
 
     public function edit($id_event)
     {
         $event = EventacaraModel::findOrFail($id_event);
         $penyelenggaras = PenyelenggaraModel::all();
-        return view('admin.event_acara.event_edit', compact('event', 'penyelenggaras'));
+        return view('admin.event.event_acara.event_edit', compact('event', 'penyelenggaras'));
     }
 
     public function update(Request $request, $id_event)

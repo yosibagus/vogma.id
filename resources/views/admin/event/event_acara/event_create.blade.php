@@ -87,17 +87,34 @@
 
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="bennerEvent" class="form-label">Banner Event</label>
-                                    <input type="file" name="benner_event" id="bennerEvent"
-                                        class="form-control form-control-sm" accept="image/*"
-                                        onchange="previewBanner(event)">
-                                    <div class="invalid-feedback">Banner harus berupa gambar.</div>
 
-                                    <div class="mt-2">
-                                        <img id="bannerPreview" src="#" alt="Preview Banner"
-                                            style="display: none; max-height: 200px;"
-                                            class="img-fluid rounded shadow-sm" />
+                                    <div class="card-body p-0">
+                                        <div class="avatar-upload d-flex align-items-center">
+                                            <div class="position-relative">
+
+                                                {{-- Preview Banner --}}
+                                                <div class="avatar-preview">
+                                                    <div id="bannerPreview"
+                                                        style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); background-size: cover; background-position: center; width: 100px; height: 100px; border-radius: 10px;">
+                                                    </div>
+                                                </div>
+
+                                                {{-- Input File --}}
+                                                <div class="change-btn d-flex align-items-center flex-wrap mt-2">
+                                                    <input type="file" class="form-control d-none" id="bennerEvent"
+                                                        name="benner_event" accept="image/*"
+                                                        onchange="previewBanner(event)">
+                                                    <label for="bennerEvent" class="btn btn-primary ms-0">Pilih
+                                                        Banner</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="invalid-feedback">Banner harus berupa gambar.</div>
                                 </div>
+
+
 
                             </div>
 
@@ -120,19 +137,13 @@
 
     <script>
         function previewBanner(event) {
-            const input = event.target;
-            const preview = document.getElementById('bannerPreview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                const bannerPreview = document.getElementById('bannerPreview');
+                bannerPreview.style.backgroundImage = 'url(' + reader.result + ')'; // Set gambar yang dipilih
+            };
+            reader.readAsDataURL(event.target.files[0]);
         }
     </script>
+
 @endsection
