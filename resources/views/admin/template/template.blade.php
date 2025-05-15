@@ -22,14 +22,7 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('xhtml') }}/images/favicon.png">
-    <link rel="stylesheet" href="{{ asset('xhtml/vendor/chartist/css/chartist.min.css') }}">
-    <link href="{{ asset('xhtml/vendor/bootstrap-select/css/bootstrap-select.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('xhtml/vendor/owl-carousel/owl.carousel.css') }}" rel="stylesheet">
-    <link href="{{ asset('xhtml/css/style.css') }}" rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&amp;family=Roboto:wght@100;300;400;500;700;900&amp;display=swap"
-        rel="stylesheet">
+    @include('admin.components.style')
 </head>
 
 <body>
@@ -123,62 +116,7 @@
         Scripts
     ***********************************-->
     <!-- Required vendors -->
-    <script src="{{ asset('xhtml') }}/vendor/global/global.min.js"></script>
-    <script src="{{ asset('xhtml') }}/vendor/bootstrap-select/js/bootstrap-select.min.js"></script>
-    <script src="{{ asset('xhtml') }}/vendor/chart-js/chart.bundle.min.js"></script>
-    <script src="{{ asset('xhtml') }}/vendor/owl-carousel/owl.carousel.js"></script>
-
-    <script src="{{ asset('xhtml') }}/vendor/peity/jquery.peity.min.js"></script>
-
-    <!-- Apex Chart -->
-    <script src="{{ asset('xhtml') }}/vendor/apexchart/apexchart.js"></script>
-
-    <!-- Dashboard 1 -->
-    <script src="{{ asset('xhtml') }}/js/dashboard/dashboard-1.js"></script>
-    <script src="{{ asset('xhtml') }}/js/custom.min.js"></script>
-    <script src="{{ asset('xhtml') }}/js/deznav-init.js"></script>
-    <script>
-        function carouselReview() {
-            /*  testimonial one function by = owl.carousel.js */
-            jQuery('.testimonial-one').owlCarousel({
-                nav: true,
-                loop: true,
-                autoplay: true,
-                margin: 30,
-                dots: false,
-                left: true,
-                navText: ['<i class="fa fa-chevron-left" aria-hidden="true"></i>',
-                    '<i class="fa fa-chevron-right" aria-hidden="true"></i>'
-                ],
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    484: {
-                        items: 2
-                    },
-                    882: {
-                        items: 3
-                    },
-                    1200: {
-                        items: 2
-                    },
-
-                    1540: {
-                        items: 3
-                    },
-                    1740: {
-                        items: 4
-                    }
-                }
-            })
-        }
-        jQuery(window).on('load', function() {
-            setTimeout(function() {
-                carouselReview();
-            }, 1000);
-        });
-    </script>
+    @include('admin.components.script')
 </body>
 
 </html>
