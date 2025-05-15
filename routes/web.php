@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FinalisController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PenyelenggaraController;
+use App\Http\Controllers\Admin\VotersController;
 use App\Http\Controllers\user\BerandaController;
 use Illuminate\Support\Facades\Route;
 
@@ -62,6 +63,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id_kandidat}/edit', [FinalisController::class, 'edit'])->name('finalis.edit');
         Route::post('/{id_kandidat}/edit', [FinalisController::class, 'update'])->name('finalis.update');
         Route::get('/{id_kandidat}/delete', [FinalisController::class, 'delete'])->name('finalis.delete');
+    });
+
+
+    // Route untuk halaman event votes
+    Route::prefix('event-votes')->group(function () {
+        Route::get('/', [VotersController::class, 'index'])->name('votes.index');
     });
 
 

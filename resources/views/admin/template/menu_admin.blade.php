@@ -65,7 +65,7 @@
     </li>
 
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/event-votes" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-notepad"></i>
             <span class="nav-text">Voters</span>
         </a>

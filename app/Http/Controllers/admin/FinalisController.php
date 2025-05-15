@@ -17,9 +17,8 @@ class FinalisController extends Controller
         $user = Auth::user();
 
         if ($user->role === 'admin') {
-            $data = FinalisModel::with('event')->get(); // Admin lihat semua finalis
+            $data = FinalisModel::with('event')->get();
         } else {
-            // Hanya ambil finalis yang event-nya dimiliki oleh user (penyelenggara)
             $data = FinalisModel::whereHas('event', function ($query) use ($user) {
                 $query->where('penyelenggara_id', $user->id);
             })->with('event')->get();
@@ -76,7 +75,6 @@ class FinalisController extends Controller
 {
     $user = Auth::user();
 
-    // Validasi umum inputan finalis
     $validatedData = $request->validate([
         'no_kandidat' => 'required|string|max:255',
         'foto_kandidat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -84,9 +82,8 @@ class FinalisController extends Controller
         'biografi_kandidat' => 'nullable|string',
     ]);
 
-    // Penentuan event_id tergantung role
     if ($user->role === 'penyelenggara') {
-        // Ambil event milik penyelenggara
+
         $event = \App\Models\EventacaraModel::where('penyelenggara_id', $user->id)->latest()->first();
 
         if (!$event) {
@@ -95,7 +92,7 @@ class FinalisController extends Controller
 
         $validatedData['event_id'] = $event->id_event;
     } elseif ($user->role === 'admin') {
-        // Admin harus pilih event_id secara eksplisit
+
         $request->validate([
             'event_id' => 'required|exists:event,id_event',
         ]);
@@ -103,7 +100,6 @@ class FinalisController extends Controller
         $validatedData['event_id'] = $request->input('event_id');
     }
 
-    // Upload foto jika ada
     if ($request->hasFile('foto_kandidat')) {
         $file = $request->file('foto_kandidat');
         $fileName = time() . '_' . $file->getClientOriginalName();
@@ -132,7 +128,6 @@ class FinalisController extends Controller
     {
         $data = FinalisModel::findOrFail($id_kandidat);
 
-        // Validasi input TANPA event_id
         $validatedData = $request->validate([
             'no_kandidat' => 'required|string|max:255',
             'foto_kandidat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -140,7 +135,6 @@ class FinalisController extends Controller
             'biografi_kandidat' => 'nullable|string',
         ]);
 
-        // Upload foto jika ada
         if ($request->hasFile('foto_kandidat')) {
             $file = $request->file('foto_kandidat');
             $fileName = time() . '_' . $file->getClientOriginalName();
@@ -148,7 +142,6 @@ class FinalisController extends Controller
             $validatedData['foto_kandidat'] = $filePath;
         }
 
-        // Update data kandidat
         $data->update($validatedData);
 
         return redirect()->route('finalis.index')->with('success', 'Kandidat berhasil diperbarui.');

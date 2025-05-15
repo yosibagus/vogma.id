@@ -27,7 +27,12 @@ class PenyelenggaraController extends Controller
 
     public function create()
     {
-        $users = AksesModel::all(); // Ambil semua user penyelenggara
+        // Ambil semua id user yang sudah digunakan sebagai penyelenggara
+        $sudahDipakai = PenyelenggaraModel::pluck('id_penyelenggara')->toArray();
+
+        // Ambil user dari AksesModel yang belum menjadi penyelenggara
+        $users = AksesModel::whereNotIn('id', $sudahDipakai)->get();
+
         return view('admin.penyelenggara.penyelenggara_create', compact('users'));
     }
 
@@ -48,10 +53,8 @@ class PenyelenggaraController extends Controller
             'email_penyelenggara',
         ]);
 
-        // Set id_penyelenggara berdasarkan pilihan admin
         $data['id_penyelenggara'] = $request->user_id;
 
-        // Upload file jika ada
         if ($request->hasFile('logo_penyelenggara')) {
             $data['logo_penyelenggara'] = $request->file('logo_penyelenggara')->store('data_penyelenggara', 'public');
         }
@@ -93,7 +96,6 @@ class PenyelenggaraController extends Controller
             'email_penyelenggara',
         ]);
 
-        // Jika ada logo baru
         if ($request->hasFile('logo_penyelenggara')) {
             if ($penyelenggara->logo_penyelenggara) {
                 Storage::disk('public')->delete($penyelenggara->logo_penyelenggara);
@@ -103,7 +105,6 @@ class PenyelenggaraController extends Controller
             $data['logo_penyelenggara'] = $penyelenggara->logo_penyelenggara;
         }
 
-        // Jika ada KTP baru
         if ($request->hasFile('dokumen_ktp')) {
             if ($penyelenggara->dokumen_ktp) {
                 Storage::disk('public')->delete($penyelenggara->dokumen_ktp);
@@ -113,7 +114,6 @@ class PenyelenggaraController extends Controller
             $data['dokumen_ktp'] = $penyelenggara->dokumen_ktp;
         }
 
-        // Jika ada NPWP baru
         if ($request->hasFile('dokumen_npwp')) {
             if ($penyelenggara->dokumen_npwp) {
                 Storage::disk('public')->delete($penyelenggara->dokumen_npwp);

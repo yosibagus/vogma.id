@@ -34,10 +34,9 @@ class EventacaraController extends Controller
 
     public function store(Request $request)
     {
-        // Ambil user yang sedang login
+
         $user = Auth::user();
 
-        // Validasi umum
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
             'url_event' => 'required|string|max:255|unique:event,url_event',
@@ -87,10 +86,9 @@ class EventacaraController extends Controller
 
     public function update(Request $request, $id_event)
     {
-        // Ambil data event berdasarkan ID
+
         $event = EventacaraModel::findOrFail($id_event);
 
-        // Validasi input
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
             'url_event' => 'required|string|max:255|unique:event,url_event,' . $event->id_event . ',id_event',
@@ -114,24 +112,21 @@ class EventacaraController extends Controller
             'max_vote',
         ]);
 
-        // Jika ada banner baru
         if ($request->hasFile('benner_event')) {
-            // Hapus banner lama jika ada
+
             if ($event->benner_event) {
                 Storage::disk('public')->delete($event->benner_event);
             }
 
-            // Simpan file baru
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $filePath = $file->storeAs('banners', $fileName, 'public');
             $data['benner_event'] = $filePath;
         } else {
-            // Tetap gunakan banner lama jika tidak ada file baru
+
             $data['benner_event'] = $event->benner_event;
         }
 
-        // Update data event
         $event->update($data);
 
         return redirect()->route('event.index')->with('success', 'Event berhasil diperbarui.');
@@ -141,12 +136,11 @@ class EventacaraController extends Controller
     {
         $event = EventacaraModel::findOrFail($id_event);
 
-        // Hapus banner jika ada
+
         if ($event->benner_event) {
             Storage::disk('public')->delete($event->benner_event);
         }
 
-        // Hapus data event
         $event->delete();
 
         return redirect()->route('event.index')->with('success', 'Event berhasil dihapus.');

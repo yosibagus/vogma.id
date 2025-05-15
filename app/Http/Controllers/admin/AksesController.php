@@ -22,15 +22,23 @@ class AksesController extends Controller
 
     public function store(Request $request)
     {
+        $cekEmail = AksesModel::where('email', $request->email)->first();
+
+        if ($cekEmail) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['email' => 'Email sudah digunakan. Silakan gunakan email lain.']);
+        }
+
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'role' => $request->role,
-
         ];
+
         AksesModel::create($data);
-        return redirect('/akses')->with('Data Akses Berhasil Disimpan');
+        return redirect('/akses')->with('success', 'Data Akses Berhasil Disimpan');
     }
 
 
@@ -41,21 +49,21 @@ class AksesController extends Controller
     }
 
     public function update($id, Request $request)
-{
+    {
 
-    $akun = AksesModel::findOrFail($id);
+        $akun = AksesModel::findOrFail($id);
 
-    $data = [
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => $request->filled('password') ? bcrypt($request->password) : $akun->password,
-        'role' => $request->filled('role') ? $request->role : $akun->role,
-    ];
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->filled('password') ? bcrypt($request->password) : $akun->password,
+            'role' => $request->filled('role') ? $request->role : $akun->role,
+        ];
 
-    $akun->update($data);
+        $akun->update($data);
 
-    return redirect('akses')->with('success', 'Akses berhasil diperbaharui');
-}
+        return redirect('akses')->with('success', 'Akses berhasil diperbaharui');
+    }
 
 
     public function delete($id)
