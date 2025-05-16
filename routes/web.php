@@ -7,6 +7,7 @@ use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PenyelenggaraController;
 use App\Http\Controllers\user\BerandaController;
+use App\Http\Controllers\user\EventController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -74,4 +75,5 @@ Route::middleware(['auth'])->group(function () {
 
 
 // Route untuk halaman beranda user
-Route::get('/beranda', [BerandaController::class, 'index']);
+Route::get('/', [BerandaController::class, 'index']);
+Route::get('/event/{url}', [EventController::class, 'index']);    

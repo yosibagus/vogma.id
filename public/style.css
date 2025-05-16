@@ -1,251 +1,495 @@
 body {
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
+}
+
+:root {
+    --color-primary: 41, 69, 143;
+    --color-accent: 239, 243, 255;
+    --color-vote-gradient: linear-gradient(90deg, #29458F 0%, #517DF1 33%, #517DF1 66.14%, #29458F 99.5%);
+    --color-primary-gradient: linear-gradient(0.11deg, #29458F 0.17%, #5B88FF 99.91%);
+    --color-vote-secondary-gradient: linear-gradient(0.11deg, #29458F 0.17%, #5B88FF 99.91%);
+    --color-border: 41, 69, 143;
 }
 
 .shadow-nav {
-  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
-  background-color: white;
+    box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 .carousel-control-prev,
 .carousel-control-next {
-  box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.7);
-  /* Shadow lebih tebal */
-  background-color: rgba(0, 0, 0, 0.5);
-  /* Warna latar belakang */
-  border-radius: 50%;
-  /* Membuat tombol lingkaran */
-  width: 60px;
-  /* Ukuran default */
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.8;
+    box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.7);
+    /* Shadow lebih tebal */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Warna latar belakang */
+    border-radius: 50%;
+    /* Membuat tombol lingkaran */
+    width: 60px;
+    /* Ukuran default */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
 }
 
 /* Memberikan jarak dari tepi kiri dan kanan */
 .carousel-control-prev {
-  left: 15px;
+    left: 15px;
 }
 
 .carousel-control-next {
-  right: 15px;
+    right: 15px;
 }
 
 /* Hover effect */
 .carousel-control-prev:hover,
 .carousel-control-next:hover {
-  background-color: rgba(0, 0, 0, 0.7);
-  opacity: 1;
+    background-color: rgba(0, 0, 0, 0.7);
+    opacity: 1;
 }
 
 /* Responsive: Perkecil tombol di layar kecil */
 @media (max-width: 768px) {
-  .carousel-control-prev,
-  .carousel-control-next {
-    width: 45px;
-    /* Perkecil tombol */
-    height: 45px;
-    box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.6);
-    /* Kurangi shadow agar proporsional */
-  }
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 45px;
+        /* Perkecil tombol */
+        height: 45px;
+        box-shadow: 3px 4px 10px rgba(0, 0, 0, 0.6);
+        /* Kurangi shadow agar proporsional */
+    }
 
-  .carousel-control-prev {
-    left: -10px;
-    /* Sesuaikan posisi */
-  }
+    .carousel-control-prev {
+        left: -10px;
+        /* Sesuaikan posisi */
+    }
 
-  .carousel-control-next {
-    right: -10px;
-    /* Sesuaikan posisi */
-  }
+    .carousel-control-next {
+        right: -10px;
+        /* Sesuaikan posisi */
+    }
 }
 
 .carousel-caption {
-  position: absolute;
-  width: 100%;
-  /* Membuat caption selebar gambar */
-  left: 0;
-  right: 0;
-  bottom: 0;
-  /* Pastikan caption berada di bagian bawah */
-  padding: 20px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0, 0.3),
-    rgba(0, 0, 0, 0)
-  );
-  text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
-  border-radius: 0;
-  /* Hapus border-radius agar penuh */
-  text-align: center;
-  /* Pastikan teks tetap di tengah */
+    position: absolute;
+    width: 100%;
+    /* Membuat caption selebar gambar */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Pastikan caption berada di bagian bawah */
+    padding: 20px;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.7),
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0)
+    );
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+    border-radius: 0;
+    /* Hapus border-radius agar penuh */
+    text-align: center;
+    /* Pastikan teks tetap di tengah */
 }
 
 /* Efek shadow lebih kuat pada judul */
 .carousel-caption h5 {
-  text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.9);
-  font-weight: bold;
-  font-size: 24px;
-  /* Sesuaikan ukuran teks */
+    text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.9);
+    font-weight: bold;
+    font-size: 24px;
+    /* Sesuaikan ukuran teks */
 }
 
 /* Efek shadow pada deskripsi */
 .carousel-caption p {
-  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
-  font-size: 16px;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    font-size: 16px;
 }
 
 /* Responsif: Ubah ukuran teks di layar kecil */
 @media (max-width: 768px) {
-  .carousel-caption {
-    padding: 10px;
-  }
+    .carousel-caption {
+        padding: 10px;
+    }
 
-  .carousel-caption h5 {
-    font-size: 18px;
-  }
+    .carousel-caption h5 {
+        font-size: 18px;
+    }
 
-  .carousel-caption p {
-    font-size: 14px;
-  }
+    .carousel-caption p {
+        font-size: 14px;
+    }
 }
 
 .carousel-item img {
-  transition: transform 5s ease-in-out;
-  transform: scale(1);
-  /* Mulai dengan skala normal */
+    transition: transform 5s ease-in-out;
+    transform: scale(1);
+    /* Mulai dengan skala normal */
 }
 
 .carousel-item.active img {
-  transform: scale(1.1);
-  /* Zoom sedikit (10%) */
+    transform: scale(1.1);
+    /* Zoom sedikit (10%) */
 }
 
 .carousel-item img {
-  border-radius: 10px !important;
-  /* Pastikan diberi !important */
-  object-fit: cover;
-  /* Memastikan gambar memenuhi area tanpa merusak aspect ratio */
+    border-radius: 10px !important;
+    /* Pastikan diberi !important */
+    object-fit: cover;
+    /* Memastikan gambar memenuhi area tanpa merusak aspect ratio */
 }
 
 #carouselExampleCaptions {
-  border-radius: 10px;
-  overflow: hidden;
-  /* Memastikan gambar tidak keluar dari radius */
+    border-radius: 10px;
+    overflow: hidden;
+    /* Memastikan gambar tidak keluar dari radius */
 }
 
 .bg-gold {
-  background: linear-gradient(
-    0deg,
-    rgba(202, 153, 61, 1) 0%,
-    rgba(235, 196, 107, 1) 100%
-  );
-  color: #fff; /* Warna teks agar kontras */
+    background: linear-gradient(
+        0deg,
+        rgba(202, 153, 61, 1) 0%,
+        rgba(235, 196, 107, 1) 100%
+    );
+    color: #fff; /* Warna teks agar kontras */
 }
 
 .btn-gold {
-  color: #fff; /* Warna teks putih */
-  background-color: #d7a910; /* Warna emas */
-  border-color: #caa031; /* Warna border emas lebih gelap */
+    color: #fff; /* Warna teks putih */
+    background-color: #d7a910; /* Warna emas */
+    border-color: #caa031; /* Warna border emas lebih gelap */
 }
 
 .btn-gold:hover {
-  background-color: #caa031; /* Warna emas lebih gelap saat hover */
-  border-color: #b88d2c;
+    background-color: #caa031; /* Warna emas lebih gelap saat hover */
+    border-color: #b88d2c;
 }
 
 .btn-gold:focus,
 .btn-gold:active {
-  background-color: #b88d2c;
-  border-color: #a67c28;
-  box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.5);
+    background-color: #b88d2c;
+    border-color: #a67c28;
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.5);
 }
 
 .btn-gold.disabled,
 .btn-gold:disabled {
-  background-color: #e6c55b;
-  border-color: #d4af37;
-  opacity: 0.65;
+    background-color: #e6c55b;
+    border-color: #d4af37;
+    opacity: 0.65;
 }
 
 /* Versi outline seperti btn-outline-primary */
 .btn-outline-gold {
-  color: #d4af37;
-  border-color: #d4af37;
-  background-color: transparent;
+    color: #d4af37;
+    border-color: #d4af37;
+    background-color: transparent;
 }
 
 .btn-outline-gold:hover {
-  background-color: #d4af37;
-  color: #fff;
+    background-color: #d4af37;
+    color: #fff;
 }
 
 .btn-outline-gold:focus,
 .btn-outline-gold:active {
-  background-color: #caa031;
-  border-color: #b88d2c;
-  color: #fff;
+    background-color: #caa031;
+    border-color: #b88d2c;
+    color: #fff;
 }
 
 .offcanvas.offcanvas-start {
-  width: 100% !important;
-  max-width: 100%;
+    width: 100% !important;
+    max-width: 100%;
 }
 .offcanvas {
-  height: 100vh;
+    height: 100vh;
 }
-
-
 
 .badge-custom {
-  padding: 0.4375em 0.875em;
-  border-radius: 116px;
-  font-size: 0.7em;
-  display: inline-flex;
-  font-weight: 500;
-  gap: 0.5em;
-  cursor: default;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  height: fit-content;
-  text-align: center;
+    padding: 0.4375em 0.875em;
+    border-radius: 116px;
+    font-size: 0.7em;
+    display: inline-flex;
+    font-weight: 500;
+    gap: 0.5em;
+    cursor: default;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
 }
 
-
 .detail-judul a {
-  text-decoration: none;
+    text-decoration: none;
 }
 
 .detail-judul a:hover {
-  text-decoration:underline;
+    text-decoration: underline;
 }
 
 .img-benner {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .badge-position {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #d4af37;
-  color: white;
-  padding: 5px 10px;
-  font-size: 12px;
-  border-radius: 10px;
-  font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #d4af37;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    font-weight: bold;
 }
 
-
 .detail-judul a {
-  color: black;
-  text-decoration: none;
-  font-weight: bold;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card-custom {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    box-shadow: 0 4px 8px rgba(30, 44, 106, 0.1);
+    border-radius: 20px;
+    padding: 36px 40px;
+}
+
+.btn-custom.btn-accent {
+    background: rgba(var(--color-accent), 1);
+    color: rgba(var(--color-primary), 1);
+}
+
+.btn-external {
+    min-width: 20%;
+    padding: 10px;
+    border: 1px solid rgb(var(--color-primary));
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.btn-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: none;
+    outline: none;
+    text-decoration: none !important;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-appearance: button;
+    appearance: button;
+    text-transform: none;
+}
+
+.position-sticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+}
+
+.divider-card {
+    height: 14px;
+    background-color: #fbfbfb;
+    width: calc(100% + 80px);
+    margin: 40px 0 40px -40px;
+}
+
+.btn-vote-juara {
+    width: 120px;
+    border-radius: 17px;
+}
+
+.top-3 {
+    margin-top: 255px;
+}
+
+.info-juara-1 {
+    margin-top: -285px;
+    margin-bottom: 70px;
+}
+
+.btn-vote-juara-1-wrapper {
+    margin-bottom: -95px;
+}
+
+.info-juara-2 {
+    margin-bottom: 60px;
+    margin-top: -185px;
+}
+
+.btn-vote-juara-2-wrapper {
+    margin-bottom: -50px;
+}
+
+.info-juara-3 {
+    margin-bottom: 50px;
+    margin-top: -140px;
+}
+
+.btn-vote-juara-3-wrapper {
+    margin-bottom: -20px;
+}
+
+.rank-top3 {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    bottom: -16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: rotate(45deg);
+    border-radius: 8px;
+}
+
+.card-top3-2 {
+    border-radius: 20px 0 0 20px;
+}
+
+.card-top3-1 {
+    transform: scale(1.1);
+    border-radius: 0 0 20px 20px;
+}
+
+.card-top3-3 {
+    border-radius: 0 20px 20px 0;
+}
+
+.lb-item {
+    gap: 90px;
+}
+
+@media (max-width: 991.73px) {
+    .top-3 {
+        margin-top: 250px;
+    }
+
+    .card-section.card-datetime {
+        margin-top: 60px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-3 {
+        margin-top: 200px;
+    }
+
+    .card-top3-1 {
+        transform: scale(1);
+        border-radius: 0px;
+    }
+
+    .lb-item {
+        gap: 10px;
+    }
+
+    .card-section.card-datetime {
+        margin-top: 32px !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .rank-top3 {
+        width: 24px;
+        height: 24px;
+        bottom: -12px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .btn-vote-juara-1-wrapper {
+        margin-bottom: -105px;
+    }
+}
+
+@media (max-width: 992px) {
+    .btn-vote-juara-1-wrapper {
+        margin-bottom: -106px;
+    }
+
+    .btn-vote-juara-2-wrapper {
+        margin-bottom: -58px;
+    }
+}
+
+@media (max-width: 768px) {
+    .btn-vote-juara-1-wrapper {
+        margin-bottom: -115px;
+    }
+
+    .btn-vote-juara-2-wrapper {
+        margin-bottom: -55px;
+    }
+
+    .btn-vote-juara {
+        width: 80px;
+    }
+}
+
+@media (max-width: 576px) {
+}
+
+@media (max-width: 470px) {
+    .btn-vote-juara {
+        width: 56px;
+        border-radius: 16px;
+    }
+
+    .info-juara-1 {
+        margin-top: -240px;
+    }
+
+    .info-juara-2 {
+        margin-top: -180px;
+    }
+
+    .info-juara-3 {
+        margin-top: -120px;
+    }
+
+    .btn-vote-juara-1-wrapper {
+        margin-bottom: -97px;
+    }
+
+    .btn-vote-juara-2-wrapper {
+        margin-bottom: -67px;
+    }
+}
+
+@media (max-width: 432px) {
+    .btn-vote-juara-1-wrapper {
+        margin-bottom: -83px;
+    }
+}
+
+@media (max-width: 376px) {
+    .info-juara-1 {
+        margin-top: -220px;
+        margin-bottom: 54px;
+    }
+
+    .info-juara-2 {
+        margin-bottom: 48px;
+    }
 }
