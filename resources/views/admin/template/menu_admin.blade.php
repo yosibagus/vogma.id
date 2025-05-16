@@ -78,8 +78,8 @@
             <span class="nav-text">Transaksi</span>
         </a>
         <ul aria-expanded="false">
-            <li><a href="flat-icons.html">Transaksi Event</a></li>
-            <li><a href="svg-icons.html">Semua Transaksi</a></li>
+            <li><a href="/transaksi/detail">Transaksi Event</a></li>
+            <li><a href="/transaksi/all">Semua Transaksi</a></li>
         </ul>
     </li>
 
