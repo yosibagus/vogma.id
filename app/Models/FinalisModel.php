@@ -14,6 +14,7 @@ class FinalisModel extends Model
 
     protected $fillable = [
         'no_kandidat',
+        'nama_kandidat',
         'foto_kandidat',
         'deskripsi_kandidat',
         'biografi_kandidat',

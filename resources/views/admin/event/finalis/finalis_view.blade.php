@@ -17,6 +17,7 @@
                                     <th>No</th>
                                     <th></th>
                                     <th>No Kandidat </th>
+                                    <th>Nama Kandidat </th>
                                     <th>Event dikuti</th>
                                     <th>Action</th>
                                 </tr>
@@ -39,6 +40,7 @@
                                         </td>
 
                                         <td>{{ $get->no_kandidat }}</td>
+                                        <td>{{ $get->nama_kandidat }}</td>
                                         <td>{{ $get->event->nama_event ?? '-' }}</td>
 
                                         <td>

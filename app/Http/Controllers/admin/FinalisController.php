@@ -28,6 +28,7 @@ class FinalisController extends Controller
     {
         $validatedData = $request->validate([
             'no_kandidat' => 'required|string|max:255',
+            'nama_kandidat' => 'required|string|max:255',
             'foto_kandidat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi_kandidat' => 'nullable|string',
             'biografi_kandidat' => 'nullable|string',
@@ -59,6 +60,7 @@ class FinalisController extends Controller
 
         $validatedData = $request->validate([
             'no_kandidat' => 'required|string|max:255',
+            'nama_kandidat' => 'required|string|max:255',
             'foto_kandidat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'deskripsi_kandidat' => 'nullable|string',
             'biografi_kandidat' => 'nullable|string',

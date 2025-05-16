@@ -28,6 +28,14 @@
                                     <div class="invalid-feedback">Event wajib dipilih.</div>
                                 </div>
 
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="validationNamakandidat" class="form-label">Nama Kandidat <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="nama_kandidat" id="validationNamakandidat" class="form-control"
+                                        placeholder="Masukkan Nama kandidat" required>
+                                    <div class="invalid-feedback">Nama kandidat wajib diisi.</div>
+                                </div>
+
                                 {{-- Nomor Kandidat --}}
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="noKandidat" class="form-label">Nomor Kandidat <span

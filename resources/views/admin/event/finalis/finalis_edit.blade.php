@@ -29,6 +29,14 @@
                                 </div>
 
                                 <div class="form-group col-md-6 mb-3">
+                                    <label for="validationNamakandidat" class="form-label">Nama Kandidat <span
+                                            class="text-danger">*</span></label>
+                                    <input type="text" name="nama_kandidat" id="validationNamakandidat"
+                                        value="{{ old('nama_kandidat', $finalis->nama_kandidat) }}" class="form-control" placeholder="Masukkan Nama kandidat" required>
+                                    <div class="invalid-feedback">Nama kandidat wajib diisi.</div>
+                                </div>
+
+                                <div class="form-group col-md-6 mb-3">
                                     <label for="noKandidat" class="form-label">Nomor Kandidat <span
                                             class="text-danger">*</span></label>
                                     <input type="text" name="no_kandidat" id="noKandidat" class="form-control"
@@ -37,13 +45,13 @@
                                     <div class="invalid-feedback">Nomor Kandidat wajib diisi.</div>
                                 </div>
 
-                                <div class="form-group col-md-12 mb-3">
+                                <div class="form-group col-md-6 mb-3">
                                     <label for="deskripsiKandidat" class="form-label">Deskripsi Kandidat</label>
                                     <textarea name="deskripsi_kandidat" id="deskripsiKandidat" rows="3" class="form-control"
                                         placeholder="Masukkan deskripsi (jika ada)">{{ old('deskripsi_kandidat', $finalis->deskripsi_kandidat) }}</textarea>
                                 </div>
 
-                                <div class="form-group col-md-12 mb-3">
+                                <div class="form-group col-md-6 mb-3">
                                     <label for="biografiKandidat" class="form-label">Biografi Kandidat</label>
                                     <textarea name="biografi_kandidat" id="biografiKandidat" rows="4" class="form-control"
                                         placeholder="Masukkan biografi (jika ada)">{{ old('biografi_kandidat', $finalis->biografi_kandidat) }}</textarea>
