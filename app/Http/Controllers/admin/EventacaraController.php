@@ -56,12 +56,12 @@ class EventacaraController extends Controller
         if ($request->hasFile('benner_event')) {
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $uploadPath = public_path('upload/banner');
+            $uploadPath = public_path('upload/benner');
             if (!File::exists($uploadPath)) {
                 File::makeDirectory($uploadPath, 0755, true);
             }
             $file->move($uploadPath, $fileName);
-            $validatedData['benner_event'] = 'upload/banner/' . $fileName;
+            $validatedData['benner_event'] = 'upload/benner/' . $fileName;
         }
 
         try {
@@ -121,7 +121,7 @@ class EventacaraController extends Controller
 
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $uploadPath = public_path('upload/banner');
+            $uploadPath = public_path('upload/benner');
             if (!File::exists($uploadPath)) {
                 File::makeDirectory($uploadPath, 0755, true);
             }
