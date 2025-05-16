@@ -19,11 +19,6 @@ class VotersModel extends Model
         'event_id',
         'kuantitas_vote',
         'total_harga_vote',
-        'nama_voters',
-        'nohp_voters',
-        'snap_token',
-        'metode_pembayaran',
-        'status_pembayaran',
         'pesan_voters'
     ];
 

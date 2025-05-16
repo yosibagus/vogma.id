@@ -6,9 +6,9 @@ if (!function_exists('rupiah')) {
     }
 }
 
-if (!function_exists('tgl')) {
-    function tgl($tgl)
+if (!function_exists('tanggal')) {
+    function tanggal($tgl)
     {
-        return date('d-m-Y', strtotime($tgl));
+        return date('d-m-Y, H:i', strtotime($tgl));
     }
 }

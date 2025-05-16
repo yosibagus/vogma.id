@@ -43,7 +43,6 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/{id_penyelenggara}/edit', [PenyelenggaraController::class, 'update'])->name('penyelenggara.update');
         Route::get('/{id_penyelenggara}/delete', [PenyelenggaraController::class, 'delete'])->name('penyelenggara.delete');
         Route::get('/penyelenggara/dokumen/{id}/{tipe}', [PenyelenggaraController::class, 'lihatDokumen'])->name('penyelenggara.dokumen');
-
     });
 
 
@@ -85,4 +84,8 @@ Route::middleware(['auth'])->group(function () {
 
 // Route untuk halaman beranda user
 Route::get('/', [BerandaController::class, 'index']);
-Route::get('/event/{url}', [EventController::class, 'index']);    
+Route::get('/event/{url}', [EventController::class, 'index']);
+Route::post('vote/checkout', [EventController::class, 'checkout']);
+
+Route::get('/vote/detail/{id}', [EventController::class, 'checkoutDetail']);
+Route::get('/vote/statusPesanan', [EventController::class, 'statusPesanan']);

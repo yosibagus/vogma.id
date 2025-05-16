@@ -1,4 +1,4 @@
-<div class="card-custom">
+{{-- <div class="card-custom">
     <div class="d-flex align-items-center" style="gap: 28px; padding-bottom: 10px; border-bottom: 1px solid #DBDFE7;">
         <div class="" style="min-width: 42px; min-height: 42px; width: 42px; border-radius: 4px;">
             <img style="max-width: 100%; width: 100%; border-radius: 4px;" src="{{ asset($detail->benner_event) }}"
@@ -33,4 +33,4 @@
             <div>Lanjutkan Pembayaran</div>
         </button>
     </div>
-</div>
+</div> --}}
