@@ -5,9 +5,23 @@ body {
 :root {
     --color-primary: 41, 69, 143;
     --color-accent: 239, 243, 255;
-    --color-vote-gradient: linear-gradient(90deg, #29458F 0%, #517DF1 33%, #517DF1 66.14%, #29458F 99.5%);
-    --color-primary-gradient: linear-gradient(0.11deg, #29458F 0.17%, #5B88FF 99.91%);
-    --color-vote-secondary-gradient: linear-gradient(0.11deg, #29458F 0.17%, #5B88FF 99.91%);
+    --color-vote-gradient: linear-gradient(
+        90deg,
+        #29458f 0%,
+        #517df1 33%,
+        #517df1 66.14%,
+        #29458f 99.5%
+    );
+    --color-primary-gradient: linear-gradient(
+        0.11deg,
+        #29458f 0.17%,
+        #5b88ff 99.91%
+    );
+    --color-vote-secondary-gradient: linear-gradient(
+        0.11deg,
+        #29458f 0.17%,
+        #5b88ff 99.91%
+    );
     --color-border: 41, 69, 143;
 }
 
@@ -492,4 +506,43 @@ body {
     .info-juara-2 {
         margin-bottom: 48px;
     }
+}
+
+.vote-card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.vote-card:hover {
+    transform: scale(1.02);
+}
+
+.vote-img {
+    width: 100%;
+    object-fit: cover;
+    border-bottom: 1px solid #ccc;
+}
+
+.vote-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+.btn-qty {
+    width: 32px;
+    height: 32px;
+}
+
+.quantity-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
 }

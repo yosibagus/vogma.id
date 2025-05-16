@@ -38,8 +38,7 @@
                             <div class="card mb-3 shadow-nav position-relative">
                                 <span class="badge badge-position badge-custom">Offline</span>
                                 <div class="card-body p-0">
-                                    <img src="https://vote.kreen.id/img_up/up_thumb/800/up_banner/67da75892e20d_organizer_67da86a492f1620250319155604.png"
-                                        alt="" class="img-benner">
+                                    <img src="{{ asset($get->benner_event) }}" alt="" class="img-benner">
                                     <div class="mt-2 p-3 pb-2 pt-0 detail-judul">
                                         <a href="{{ url('event/' . $get->url_event) }}" class="text-dark" style="font-size: 13px;">{{ $get->nama_event }}</a>
                                     </div>
