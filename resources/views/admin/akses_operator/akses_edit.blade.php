@@ -35,16 +35,17 @@
                                 <div class="form-group col-md-4">
                                     <label>Role</label>
                                     <select name="role" id="inputState" class="form-control default-select">
-                                        <option selected disabled  >Pilih Role...</option>
+                                        <option selected disabled>Pilih Role...</option>
                                         <option value="Admin" {{ $akun->role == 'Admin' ? 'selected' : '' }}>Admin</option>
-                                        <option value="Penyelenggara" {{ $akun->role == 'Penyelenggara' ? 'selected' : '' }}>Penyelenggara</option>
+                                        <option value="Penyelenggara"
+                                            {{ $akun->role == 'Penyelenggara' ? 'selected' : '' }}>Penyelenggara</option>
                                     </select>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Simpan</button>
                             <a href="/akses">
                                 <button type="button" class="btn btn-danger">kembali</button>
                             </a>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </form>
                     </div>
                 </div>

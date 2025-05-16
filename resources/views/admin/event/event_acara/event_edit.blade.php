@@ -89,20 +89,29 @@
                                 </div>
 
                                 <div class="form-group col-md-6 mb-3">
-                                    <label for="bennerEvent" class="form-label">Banner Event</label>
-                                    <input type="file" name="benner_event" id="bennerEvent"
-                                        class="form-control form-control-sm" accept="image/*"
-                                        onchange="previewBanner(event)">
-                                    <div class="invalid-feedback">Banner harus berupa gambar.</div>
-
-                                    @if ($event->benner_event)
-                                        <div class="mt-2">
-                                            <img src="{{ asset('storage/' . $event->benner_event) }}"
-                                                alt="Banner Saat Ini" style="max-height: 200px;"
-                                                class="img-fluid rounded shadow-sm">
+                                    <label for="bannerUpload" class="form-label">Banner Event</label>
+                                    <div class="d-flex flex-column align-items-start">
+                                        {{-- Preview Banner --}}
+                                        <div id="bannerPreview"
+                                            style="background-image: url('{{ $event->benner_event ? asset('upload/banner/' . basename($event->benner_event)) : asset('images/no-img-avatar.png') }}');
+                width: 200px; height: 120px;
+                border-radius: 10px;
+                background-size: cover;
+                background-position: center;
+                border: 1px solid #ccc;">
                                         </div>
-                                    @endif
+
+                                        {{-- Input File & Label --}}
+                                        <div class="mt-2">
+                                            <input type="file" class="form-control d-none" id="bannerUpload"
+                                                name="benner_event" accept=".png, .jpg, .jpeg"
+                                                onchange="previewImage(event, 'bannerPreview')">
+                                            <label for="bannerUpload" class="btn btn-sm btn-primary mt-1">Update
+                                                Banner</label>
+                                        </div>
+                                    </div>
                                 </div>
+
 
                             </div>
 
@@ -120,20 +129,13 @@
 
 
     <script>
-        function previewBanner(event) {
-            const input = event.target;
-            const preview = document.getElementById('bannerPreview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
+        function previewImage(event, previewId) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                document.getElementById(previewId).style.backgroundImage = `url('${reader.result}')`;
+            };
+            reader.readAsDataURL(event.target.files[0]);
         }
     </script>
+
 @endsection

@@ -15,9 +15,6 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    {{-- @if (Auth::user()->role === 'admin')
-                                        <th>Username</th>
-                                    @endif --}}
                                     <th></th>
                                     <th>Nama </th>
                                     <th>Email </th>
@@ -31,14 +28,15 @@
                                     <tr>
 
                                         <td>{{ $no++ }}</td>
-                                        {{-- @if (Auth::user()->role === 'admin')
-                                            <td>{{ $get->users->name ?? 'Tidak Diketahui' }}</td>
-                                        @endif --}}
                                         <td>
                                             <div style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%;">
-                                                <img src="{{ asset('storage/' . $get->logo_penyelenggara) }}"
-                                                    alt="Logo Penyelenggara"
-                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                                @if ($get->logo_penyelenggara)
+                                                    <img src="{{ asset($get->logo_penyelenggara) }}"
+                                                        alt="Logo Penyelenggara"
+                                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
                                             </div>
                                         </td>
 

@@ -26,15 +26,20 @@
                                     <tr>
 
                                         <td>{{ $no++ }}</td>
+
                                         <td>
                                             <div style="width: 40px; height: 40px; overflow: hidden; border-radius: 50%;">
-                                                <img src="{{ asset('storage/' . $get->foto_kandidat) }}" alt="Foto kandidat"
-                                                    style="width: 100%; height: 100%; object-fit: cover;">
+                                                @if ($get->foto_kandidat)
+                                                    <img src="{{ asset($get->foto_kandidat) }}" alt="foto kandidat"
+                                                        style="width: 100%; height: 100%; object-fit: cover;">
+                                                @else
+                                                    <span class="text-muted">-</span>
+                                                @endif
                                             </div>
                                         </td>
 
                                         <td>{{ $get->no_kandidat }}</td>
-                                         <td>{{ $get->event->nama_event ?? '-' }}</td>
+                                        <td>{{ $get->event->nama_event ?? '-' }}</td>
 
                                         <td>
                                             <div class="d-flex">
@@ -61,7 +66,8 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                                                     </button>
                                                 </div>
-                                                <div class="modal-body">Apakah Anda Yakin Menghapus Data dengan Event yang diikuti
+                                                <div class="modal-body">Apakah Anda Yakin Menghapus Data dengan Event yang
+                                                    diikuti
                                                     <b>
                                                         {{ $get->event->nama_event ?? '-' }}</b> ?
                                                 </div>

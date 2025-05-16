@@ -7,7 +7,9 @@ use App\Models\EventacaraModel;
 use App\Models\PenyelenggaraModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
 
 class EventacaraController extends Controller
 {
@@ -22,21 +24,21 @@ class EventacaraController extends Controller
             $data = EventacaraModel::where('penyelenggara_id', $user->id)->get();
         }
 
-        return view('admin.event_acara.event_view', compact('data', 'no'));
+        return view('admin.event.event_acara.event_view', compact('data', 'no'));
     }
 
     public function create()
     {
         $penyelenggaras = PenyelenggaraModel::all();
-        return view('admin.event_acara.event_create', compact('penyelenggaras'));
+        return view('admin.event.event_acara.event_create', compact('penyelenggaras'));
     }
 
     public function store(Request $request)
     {
-        // Ambil user yang sedang login
-        $user = Auth::user();
+        $request->merge([
+            'url_event' => Str::slug($request->nama_event),
+        ]);
 
-        // Validasi input TANPA penyelenggara_id
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
             'url_event' => 'required|string|max:255|unique:event,url_event',
@@ -47,38 +49,45 @@ class EventacaraController extends Controller
             'deskripsi_event' => 'nullable|string',
             'max_vote' => 'nullable|integer|min:1',
             'benner_event' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
         ]);
 
-        // Tambahkan penyelenggara_id dari user yang login
-        $validatedData['penyelenggara_id'] = $user->id;
-
-        // Handle upload file jika ada
+        // Simpan file ke public/uploads
         if ($request->hasFile('benner_event')) {
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('banners', $fileName, 'public');
-            $validatedData['benner_event'] = $filePath;
+            $uploadPath = public_path('upload/banner');
+            if (!File::exists($uploadPath)) {
+                File::makeDirectory($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $fileName);
+            $validatedData['benner_event'] = 'upload/banner/' . $fileName;
         }
 
-        // Simpan data ke database
-        EventacaraModel::create($validatedData);
-
-        return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
+        try {
+            EventacaraModel::create($validatedData);
+            return redirect()->route('event.index')->with('success', 'Event berhasil ditambahkan.');
+        } catch (\Exception $e) {
+            Log::error('Gagal menyimpan event: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan event.');
+        }
     }
 
     public function edit($id_event)
     {
         $event = EventacaraModel::findOrFail($id_event);
         $penyelenggaras = PenyelenggaraModel::all();
-        return view('admin.event_acara.event_edit', compact('event', 'penyelenggaras'));
+        return view('admin.event.event_acara.event_edit', compact('event', 'penyelenggaras'));
     }
 
     public function update(Request $request, $id_event)
     {
-        // Ambil data event berdasarkan ID
+        $request->merge([
+            'url_event' => Str::slug($request->nama_event),
+        ]);
+
         $event = EventacaraModel::findOrFail($id_event);
 
-        // Validasi input
         $validatedData = $request->validate([
             'nama_event' => 'required|string|max:255',
             'url_event' => 'required|string|max:255|unique:event,url_event,' . $event->id_event . ',id_event',
@@ -89,6 +98,7 @@ class EventacaraController extends Controller
             'deskripsi_event' => 'nullable|string',
             'max_vote' => 'nullable|integer|min:1',
             'benner_event' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'penyelenggara_id' => 'required|exists:penyelenggara,id_penyelenggara',
         ]);
 
         $data = $request->only([
@@ -100,26 +110,27 @@ class EventacaraController extends Controller
             'harga_event',
             'deskripsi_event',
             'max_vote',
+            'penyelenggara_id',
         ]);
 
-        // Jika ada banner baru
         if ($request->hasFile('benner_event')) {
-            // Hapus banner lama jika ada
-            if ($event->benner_event) {
-                Storage::disk('public')->delete($event->benner_event);
+            // Hapus file lama jika ada
+            if ($event->benner_event && file_exists(public_path($event->benner_event))) {
+                unlink(public_path($event->benner_event));
             }
 
-            // Simpan file baru
             $file = $request->file('benner_event');
             $fileName = time() . '_' . $file->getClientOriginalName();
-            $filePath = $file->storeAs('banners', $fileName, 'public');
-            $data['benner_event'] = $filePath;
+            $uploadPath = public_path('upload/banner');
+            if (!File::exists($uploadPath)) {
+                File::makeDirectory($uploadPath, 0755, true);
+            }
+            $file->move($uploadPath, $fileName);
+            $data['benner_event'] = 'upload/benner' . $fileName;
         } else {
-            // Tetap gunakan banner lama jika tidak ada file baru
             $data['benner_event'] = $event->benner_event;
         }
 
-        // Update data event
         $event->update($data);
 
         return redirect()->route('event.index')->with('success', 'Event berhasil diperbarui.');
@@ -129,12 +140,11 @@ class EventacaraController extends Controller
     {
         $event = EventacaraModel::findOrFail($id_event);
 
-        // Hapus banner jika ada
-        if ($event->benner_event) {
-            Storage::disk('public')->delete($event->benner_event);
+        // Hapus file lama jika ada
+        if ($event->benner_event && file_exists(public_path($event->benner_event))) {
+            unlink(public_path($event->benner_event));
         }
 
-        // Hapus data event
         $event->delete();
 
         return redirect()->route('event.index')->with('success', 'Event berhasil dihapus.');

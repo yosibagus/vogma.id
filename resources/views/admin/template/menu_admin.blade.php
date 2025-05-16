@@ -16,7 +16,7 @@
         <b class="">Utility</b>
     </li>
     <li>
-        <a href="home" class="ai-icon" aria-expanded="false">
+        <a href="/home" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-networking"></i>
             <span class="nav-text">Dashboard</span>
         </a>
@@ -27,19 +27,21 @@
                 <i class="flaticon-381-settings-2"></i>
                 <span class="nav-text">Operator</span>
             </a>
-        @endif
     </li>
     <li>
         <hr class="hr-horizontal">
     </li>
+
     <li>
         <b class="">Vote</b>
     </li>
     <li>
+
         <a href="/penyelenggara" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-briefcase"></i>
             <span class="nav-text">Penyelenggara</span>
         </a>
+
     </li>
     <li>
         <a href="/event-acara" class="ai-icon" aria-expanded="false">
@@ -53,6 +55,7 @@
             <span class="nav-text">Finalis</span>
         </a>
     </li>
+    @endif
 
     <li>
         <hr class="hr-horizontal">
@@ -63,23 +66,21 @@
     </li>
 
     <li>
-        <a href="penyelenggara" class="ai-icon" aria-expanded="false">
+        <a href="/event-votes" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-notepad"></i>
             <span class="nav-text">Voters</span>
         </a>
     </li>
 
     <li>
-        @if (Auth::user()->role == 'admin')
-            <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                <i class="flaticon-381-compact-disc-1"></i>
-                <span class="nav-text">Transaksi</span>
-            </a>
-            <ul aria-expanded="false">
-                <li><a href="flat-icons.html">Transaksi Event</a></li>
-                <li><a href="svg-icons.html">Semua Transaksi</a></li>
-            </ul>
-        @endif
+        <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <i class="flaticon-381-compact-disc-1"></i>
+            <span class="nav-text">Transaksi</span>
+        </a>
+        <ul aria-expanded="false">
+            <li><a href="flat-icons.html">Transaksi Event</a></li>
+            <li><a href="svg-icons.html">Semua Transaksi</a></li>
+        </ul>
     </li>
 
 </ul>

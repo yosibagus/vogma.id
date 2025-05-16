@@ -33,5 +33,8 @@ class EventacaraModel extends Model
         return $this->belongsTo(PenyelenggaraModel::class, 'penyelenggara_id', 'id_penyelenggara');
     }
 
-
+    public function kandidat()
+    {
+        return $this->hasMany(FinalisModel::class, 'event_id', 'id_event');
+    }
 }

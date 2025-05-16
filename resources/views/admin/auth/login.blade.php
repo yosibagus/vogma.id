@@ -10,7 +10,7 @@
                             <div class="col-xl-12">
                                 <div class="auth-form">
                                     <div class="text-center mb-3">
-                                        <a href="index.html"><img src="images/logo-full.png" alt=""></a>
+                                        <a href="index.html"><img src="{{ asset('logo.png') }}" width="100px" alt=""></a>
                                     </div>
                                     <h4 class="text-center mb-4">Sign in your account</h4>
                                     <form action="/login" method="POST">
@@ -66,19 +66,14 @@
                                                         preference</label>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
-                                                <a href="page-forgot-password.html">Forgot Password?</a>
-                                            </div>
+
                                         </div>
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-primary light btn-block">Sign
                                                 In</button>
                                         </div>
                                     </form>
-                                    <div class="new-account mt-3">
-                                        <p>Don't have an account? <a class="text-primary" href="page-register.html">Sign
-                                                up</a></p>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>

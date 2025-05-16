@@ -1,34 +1,41 @@
 @extends('admin.template.template')
 @section('content_admin')
     <div class="row">
+        @if ($errors->any())
+            <div class="alert alert-danger mt-2">
+                <ul class="mb-0">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="col-xl-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Form Tambah Event</h4>
                 </div>
+
                 <div class="card-body">
                     <div class="basic-form">
                         <form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <div class="row needs-validation" novalidate>
 
-                                @if (Auth::user()->role === 'admin')
-                                    <div class="form-group col-md-6 mb-3">
-                                        <label for="validationNama" class="form-label">Nama Penyelenggara <span
-                                                class="text-danger">*</span></label>
-                                        <select name="penyelenggara_id" id="validationNama" class="form-control" required>
-                                            <option value="" disabled selected>Pilih Penyelenggara</option>
-                                            @foreach ($penyelenggaras as $penyelenggara)
-                                                <option value="{{ $penyelenggara->id_penyelenggara }}">
-                                                    {{ $penyelenggara->nama_penyelenggara }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        <div class="invalid-feedback">Nama Penyelenggara wajib dipilih.</div>
-                                    </div>
-                                @else
-                                    <input type="hidden" name="penyelenggara_id" value="{{ Auth::user()->id }}">
-                                @endif
+                            <div class="row needs-validation" novalidate>
+                                <div class="form-group col-md-6 mb-3">
+                                    <label for="validationNama" class="form-label">Nama Penyelenggara <span
+                                            class="text-danger">*</span></label>
+                                    <select name="penyelenggara_id" id="validationNama" class="form-control" required>
+                                        <option value="" disabled selected>Pilih Penyelenggara</option>
+                                        @foreach ($penyelenggaras as $penyelenggara)
+                                            <option value="{{ $penyelenggara->id_penyelenggara }}">
+                                                {{ $penyelenggara->nama_penyelenggara }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <div class="invalid-feedback">Nama Penyelenggara wajib dipilih.</div>
+                                </div>
+
 
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="validationEvent" class="form-label">Nama Event <span
@@ -36,14 +43,6 @@
                                     <input type="text" name="nama_event" id="validationEvent" class="form-control"
                                         placeholder="Masukkan Nama Event" required>
                                     <div class="invalid-feedback">Nama Event wajib diisi.</div>
-                                </div>
-
-                                <div class="form-group col-md-6 mb-3">
-                                    <label for="validationUrl" class="form-label">URL Event <span
-                                            class="text-danger">*</span></label>
-                                    <input type="text" name="url_event" id="validationUrl" class="form-control"
-                                        placeholder="Contoh: voting-pemuda-2025" required>
-                                    <div class="invalid-feedback">URL Event wajib diisi.</div>
                                 </div>
 
                                 <div class="form-group col-md-3 mb-3">
@@ -87,17 +86,34 @@
 
                                 <div class="form-group col-md-6 mb-3">
                                     <label for="bennerEvent" class="form-label">Banner Event</label>
-                                    <input type="file" name="benner_event" id="bennerEvent"
-                                        class="form-control form-control-sm" accept="image/*"
-                                        onchange="previewBanner(event)">
-                                    <div class="invalid-feedback">Banner harus berupa gambar.</div>
 
-                                    <div class="mt-2">
-                                        <img id="bannerPreview" src="#" alt="Preview Banner"
-                                            style="display: none; max-height: 200px;"
-                                            class="img-fluid rounded shadow-sm" />
+                                    <div class="card-body p-0">
+                                        <div class="avatar-upload d-flex align-items-center">
+                                            <div class="position-relative">
+
+                                                {{-- Preview Banner --}}
+                                                <div class="avatar-preview">
+                                                    <div id="bannerPreview"
+                                                        style="background-image: url('{{ asset('images/no-img-avatar.png') }}'); background-size: cover; background-position: center; width: 100px; height: 100px; border-radius: 10px;">
+                                                    </div>
+                                                </div>
+
+                                                {{-- Input File --}}
+                                                <div class="change-btn d-flex align-items-center flex-wrap mt-2">
+                                                    <input type="file" class="form-control d-none" id="bennerEvent"
+                                                        name="benner_event" accept="image/*"
+                                                        onchange="previewBanner(event)">
+                                                    <label for="bennerEvent" class="btn btn-primary ms-0">Pilih
+                                                        Banner</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="invalid-feedback">Banner harus berupa gambar.</div>
                                 </div>
+
+
 
                             </div>
 
@@ -120,19 +136,12 @@
 
     <script>
         function previewBanner(event) {
-            const input = event.target;
-            const preview = document.getElementById('bannerPreview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
+            const reader = new FileReader();
+            reader.onload = function() {
+                const bannerPreview = document.getElementById('bannerPreview');
+                bannerPreview.style.backgroundImage = 'url(' + reader.result + ')'; // Set gambar yang dipilih
+            };
+            reader.readAsDataURL(event.target.files[0]);
         }
     </script>
 @endsection
