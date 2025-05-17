@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FinalisController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\PenyelenggaraController;
+use App\Http\Controllers\Admin\TransaksiController;
 use App\Http\Controllers\Admin\VotersController;
 use App\Http\Controllers\user\BerandaController;
 use App\Http\Controllers\user\EventController;
@@ -71,6 +72,14 @@ Route::middleware(['auth'])->group(function () {
     // Route untuk halaman event votes
     Route::prefix('event-votes')->group(function () {
         Route::get('/', [VotersController::class, 'index'])->name('votes.index');
+    });
+
+
+
+    // Route untuk halaman detail event votes transaksi
+    Route::prefix('transaksi')->group(function () {
+        Route::get('/detail', [TransaksiController::class, 'detail'])->name('votes.detail');
+        Route::get('/all', [TransaksiController::class, 'all_transaksi'])->name('votes.all');
     });
 
 
