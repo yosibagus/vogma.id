@@ -16,7 +16,7 @@
         <b class="">Utility</b>
     </li>
     <li>
-        <a href="/home" class="ai-icon" aria-expanded="false">
+        <a href="/dashboard" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-networking"></i>
             <span class="nav-text">Dashboard</span>
         </a>
