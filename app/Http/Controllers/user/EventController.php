@@ -31,11 +31,50 @@ class EventController extends Controller
         return view('user.event.event_detail', $data);
     }
 
+    public function kandidatDetail($url, $id)
+    {
+        $detail = FinalisModel::where('id_kandidat', $id)->first();
+        return view('user.event.event_kandidat', compact('detail'));
+    }
+
     private function _getDataFinalis($idEvent)
     {
-        $finalis = FinalisModel::where('event_id', $idEvent)->get();
-        return $finalis;
+        // Ambil semua kandidat finalis untuk event ini
+        $finalis = DB::table('event_kandidat')
+            ->where('event_id', $idEvent)
+            ->get();
+
+        // Hitung total vote semua kandidat event ini
+        $totalVotes = DB::table('event_votes')
+            ->join('event_kandidat', 'event_votes.kandidat_id', '=', 'event_kandidat.id_kandidat')
+            ->where('event_kandidat.event_id', $idEvent)
+            ->where('event_votes.status_vote', 'ok')
+            ->sum('event_votes.kuantitas_vote');
+
+        // Buat array hasil
+        $result = [];
+
+        foreach ($finalis as $f) {
+            // Hitung vote kandidat ini
+            $jumlahVote = DB::table('event_votes')
+                ->where('kandidat_id', $f->id_kandidat)
+                ->sum('kuantitas_vote');
+
+            // Hitung persentase
+            $persentase = $totalVotes > 0 ? round(($jumlahVote / $totalVotes) * 100, 2) : 0;
+
+            // Tambahkan property ke object stdClass agar bisa dipakai di blade
+            $f->jumlah_vote = $jumlahVote;
+            $f->persentase_vote = $persentase;
+
+            $result[] = $f;
+        }
+
+        // Urutkan berdasarkan persentase_vote descending
+        return collect($result)->sortByDesc('persentase_vote')->values();
     }
+
+
 
     public function checkout(Request $request)
     {
@@ -74,7 +113,15 @@ class EventController extends Controller
             VotersModel::insert($votes);
 
             $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
-            $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
+
+            $qr_url = '';
+
+            if ($metode_pembayaran != 'qris') {
+                $vaObject = collect($transaction->va_numbers)->firstWhere('bank', strtolower($metode_pembayaran));
+                $qr_url = $vaObject->va_number ?? null;
+            } else {
+                $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
+            }
             $expiry_time = $transaction->expiry_time ?? null;
 
             $vote_detail = [

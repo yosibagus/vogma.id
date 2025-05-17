@@ -28,4 +28,6 @@ class FinalisModel extends Model
     {
         return $this->belongsTo(EventacaraModel::class, 'event_id', 'id_event');
     }
+
+    
 }

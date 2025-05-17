@@ -60,7 +60,7 @@
                                                     <div class="col-3 nopad">
                                                         <div class="d-flex flex-column">
                                                             <span class="text-danger jam" id="min"
-                                                                style="font-weight: 600;">58</span>
+                                                                style="font-weight: 600;">00</span>
                                                             <span class="ket-jam">Menit</span>
                                                         </div>
                                                     </div>
@@ -70,7 +70,7 @@
                                                     <div class="col-3 nopad">
                                                         <div class="d-flex flex-column">
                                                             <span class="text-danger jam" id="sec"
-                                                                style="font-weight: 600;">56</span>
+                                                                style="font-weight: 600;">00</span>
                                                             <span class="ket-jam">Detik</span>
                                                         </div>
                                                     </div>
@@ -93,8 +93,12 @@
                                 <div class="mt-4">
                                     <div class="row align-items-center justify-content-between">
                                         <div class="col-md-3 text-center text-md-left">
-                                            <img src="{{ asset('qris.png') }}" alt="Payment Method"
-                                                style="width: 100%; max-width: 200px;">
+                                            @if ($detail->metode_pembayaran == 'qris')
+                                                <img src="{{ asset('qris.png') }}" alt="Payment Method"
+                                                    style="width: 100%; max-width: 200px;">
+                                            @else
+                                                Bank Transfer
+                                            @endif
                                         </div>
                                         <div class="col-md-9 d-flex justify-content-md-end justify-content-center">
                                             <div class="text-center text-md-end text-primary font-weight-bold"
@@ -111,8 +115,19 @@
                                             <div id="ls-spinner"></div>
                                             <div class="mt-3">Memuat QR</div>
                                         </div>
-                                        <img id="qrCodeImage" style="display: block; width: 300px; height: 300px;"
-                                            src="{!! $detail->kode_pembayaran !!}">
+                                        @if ($detail->metode_pembayaran != 'qris')
+                                            <div class="text-center">
+                                                <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
+                                                Kode Pembayaran
+                                            </p>
+                                            <h5 style="font-weight: 400; color: #000;">
+                                                {{ $detail->kode_pembayaran }}
+                                            </h5>
+                                            </div>
+                                        @else
+                                            <img id="qrCodeImage" style="display: block; width: 300px; height: 300px;"
+                                                src="{!! $detail->kode_pembayaran !!}">
+                                        @endif
                                     </div>
                                     <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
                                         Kode Pesanan
@@ -235,7 +250,7 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            $('#statusModal').on('show.bs.modal', function() { 
+            $('#statusModal').on('show.bs.modal', function() {
                 var currentIdPesanan = "{{ $detail->token_vote }}";
                 getStatus(currentIdPesanan);
             });
@@ -259,6 +274,36 @@
                 });
             }
 
+            getExpireTime();
+
+            function getExpireTime() {
+                const expireTime = "{{ $detail->kardaluarsa_pembayaran }}";
+                const expireDate = new Date(expireTime).getTime();
+
+                const timer = setInterval(function() {
+                    const now = new Date().getTime();
+                    const distance = expireDate - now;
+
+                    if (distance < 0) {
+                        clearInterval(timer);
+                        $('#hour').text('00');
+                        $('#min').text('00');
+                        $('#sec').text('00');
+                        // Tambahkan aksi jika waktu habis, misalnya auto-submit form:
+                        // $('#yourFormId').submit();
+                        return;
+                    }
+
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    $('#hour').text(hours.toString().padStart(2, '0'));
+                    $('#min').text(minutes.toString().padStart(2, '0'));
+                    $('#sec').text(seconds.toString().padStart(2, '0'));
+
+                }, 1000);
+            }
         });
     </script>
 @endsection

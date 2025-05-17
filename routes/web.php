@@ -85,6 +85,7 @@ Route::middleware(['auth'])->group(function () {
 // Route untuk halaman beranda user
 Route::get('/', [BerandaController::class, 'index']);
 Route::get('/event/{url}', [EventController::class, 'index']);
+Route::get('/event/{url}/{id}', [EventController::class, 'kandidatDetail']);
 Route::post('vote/checkout', [EventController::class, 'checkout']);
 
 Route::get('/vote/detail/{id}', [EventController::class, 'checkoutDetail']);

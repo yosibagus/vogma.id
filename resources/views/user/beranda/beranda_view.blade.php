@@ -1,6 +1,7 @@
 @extends('user.layouts.template')
 
 @section('content')
+    @include('user.layouts.menu_utama')
     @include('user.layouts.benner')
     <div class="row mx-0 px-0 justify-content-center">
         <div class="col-12 col-xl-8">
@@ -34,13 +35,15 @@
             <div id="owl-carousel" class="owl-carousel owl-theme mt-3">
                 @foreach ($event as $get)
                     <div class="item">
-                        <a href="{{ url('event/' . $get->url_event) }}" class="carousel-item-content" style="text-decoration: none;">
+                        <a href="{{ url('event/' . $get->url_event) }}" class="carousel-item-content"
+                            style="text-decoration: none;">
                             <div class="card mb-3 shadow-nav position-relative">
                                 <span class="badge badge-position badge-custom">Offline</span>
                                 <div class="card-body p-0">
                                     <img src="{{ asset($get->benner_event) }}" alt="" class="img-benner">
                                     <div class="mt-2 p-3 pb-2 pt-0 detail-judul">
-                                        <a href="{{ url('event/' . $get->url_event) }}" class="text-dark" style="font-size: 13px;">{{ $get->nama_event }}</a>
+                                        <a href="{{ url('event/' . $get->url_event) }}" class="text-dark"
+                                            style="font-size: 13px;">{{ $get->nama_event }}</a>
                                     </div>
                                 </div>
                             </div>

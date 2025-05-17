@@ -1,6 +1,8 @@
 body {
     font-family: "Poppins", sans-serif;
-     padding-bottom: 100px;
+    
+    height: 100%;
+    margin: 0;
 }
 
 :root {
@@ -548,28 +550,26 @@ body {
     margin-top: 10px;
 }
 
-
 #cart-bar {
     border-top-left-radius: 1rem;
     border-top-right-radius: 1rem;
     border: 1px solid #ddd;
 }
 
-
 .metode-pembayaran {
-  cursor: pointer;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 10px;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .metode-pembayaran.active {
-  background-color: #d1e7dd; /* warna hijau muda */
-  border-color: #0f5132;
-  color: #0f5132;
+    background-color: #d1e7dd; /* warna hijau muda */
+    border-color: #0f5132;
+    color: #0f5132;
 }

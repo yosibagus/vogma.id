@@ -17,8 +17,10 @@
         }
     </style> --}}
 
+    @include('user.layouts.menu_event')
 
-    <div class="row mx-0 px-0 justify-content-center mt-4 mb-5">
+
+    <div class="row mx-0 px-0 justify-content-center mt-5 mb-5">
         <div class="col-12 col-xl-8">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
@@ -30,7 +32,7 @@
 
             <div class="row">
                 <section class="left-items col-12 col-lg-8 mt-4">
-                    <div class="banner" style="border-radius: 20px;">
+                    <div class="card" style="border-radius: 20px;">
                         <img src="{{ asset($detail->benner_event) }}" style="max-width: 100%; border-radius: 20px;"
                             alt="banner-event">
                     </div>
@@ -50,7 +52,7 @@
                             </div>
                         </div>
 
-                        <div class="d-flex align-items-center mt-5" style="gap: 1.3125rem;">
+                        {{-- <div class="d-flex align-items-center mt-5" style="gap: 1.3125rem;">
                             <button class="btn-custom btn-accent btn-external" style="" data-toggle="modal"
                                 data-target="#modal-faq">FAQ Vote <i class="fas fa-external-link"
                                     aria-hidden="true"></i></button>
@@ -60,7 +62,7 @@
                             <button class="btn-custom btn-accent btn-external" style="" data-toggle="modal"
                                 data-target="#modal-snk">S&amp;K Voting <i class="fas fa-external-link"
                                     aria-hidden="true"></i></button>
-                        </div>
+                        </div> --}}
 
                         <div class="divider-card"></div>
 
@@ -72,66 +74,60 @@
                             </div>
                         </div>
 
-                        <div class="divider-card"></div>
-
                         {{-- backup top 3 --}}
-                        <div class="d-flex flex-column mt-2" style="gap: 8px;">
-                            <div class="card-custom d-flex p-4 mt-md-4" onclick="voteTop3('QAHEKYRSMPGDRJACB751', 'Yesha')"
-                                style="cursor: pointer;">
-                                <div class="d-flex justify-content-between lb-item">
-                                    <div class="d-flex w-100" style="gap: 16px;">
-                                        <div style="font-size: 1.125rem; font-weight: 600;">
-                                            4</div>
-                                        <div style="flex-grow: 1">
-                                            <div class="d-flex" style="gap: 16px;">
-                                                <img loading="lazy" class="tw:max-w-22 tw:min-[375]:max-w-24 tw:w-full"
-                                                    src="https://vote.kreenconnect.com/img_up/up_thumb/500/up_banner/image_6822e68865147202505131328246822d1d069d4f.png"
-                                                    alt="Poster Finalis" width="80"
-                                                    style="aspect-ratio: 1/1; object-fit: cover; flex-shrink: 0;">
 
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-1 text-clamp-2 text-center text-lg-left"
-                                                        style="font-size: 1rem; font-weight: 600;">
-                                                        Yesha</div>
-                                                    <div class="mb-3 text-center text-lg-left" style="font-size: 1rem; ">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex-shrink-0">
-                                        <div
-                                            style="color: rgb(var(--color-primary)); font-size: 1.25rem; font-weight: 600; text-align: center; ">
-
-                                        </div>
-                                        <div style="font-size: 1rem; text-align: center; ">
-                                            380 Votes
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
 
                         <div class="divider-card"></div>
 
                         {{-- finalis --}}
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" id="basic-addon1"><span
+                                        class="mdi mdi-magnify"></span></span>
+                                <input type="text" class="form-control" placeholder="Cari Finalis..."
+                                    aria-label="fanalis" id="cari" aria-describedby="basic-addon1">
+                            </div>
+                            <div id="notFoundAlert" class="alert alert-warning w-100 text-center" style="display: none;">
+                                Finalis tidak ditemukan.
+                            </div>
+
                             @foreach ($finalis as $get)
-                                <div class="col">
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 col-xxl-4 kandidat-item"
+                                    data-nama="{{ strtolower($get->nama_kandidat) }}">
                                     <div class="vote-card p-3">
                                         <img src="{{ asset($get->foto_kandidat) }}" class="vote-img" alt="">
                                         <div class="card-body text-center">
-                                            <h5 class="card-title mt-3">{{ $get->nama_kandidat }}</h5>
-                                            <div class="vote-section mt-3">
-                                                <div><i class="bi bi-cash"></i>
-                                                    Harga<br><strong>{{ rupiah($detail->harga_event) }}</strong></div>
-                                                <div><i class="bi bi-bar-chart-fill"></i> Vote<br><strong>2.33%</strong>
+                                            <h6 class="card-title mt-3 mb-1">{{ $get->nama_kandidat }}</h6>
+                                            <p>({{ $get->no_kandidat }})</p>
+
+                                            <div class="w-100 mt-auto mb-3"
+                                                style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center;">
+                                                <div class="text-center"
+                                                    style="border-right: 1px solid rgba(246, 246, 246, 1);">
+                                                    <div class="mb-2 d-flex align-items-center justify-content-center"
+                                                        style="font-size: 12px; gap: 6px; font-weight: 500;"><img
+                                                            src="{{ asset('dollar-coin.svg') }}" alt="harga">
+                                                        Harga
+                                                    </div>
+                                                    <div class="notranslate" style="font-size: 14px; font-weight: 700;">
+                                                        {{ rupiah($detail->harga_event) }}
+                                                    </div>
+                                                </div>
+                                                <div class="text-center">
+                                                    <div class="mb-2 d-flex align-items-center justify-content-center"
+                                                        style="font-size: 12px; gap: 6px; font-weight: 500;"><img
+                                                            src="https://kreenconnect.com/image/icon-vote/Blue/chart.svg"
+                                                            alt="vote">Vote
+                                                    </div>
+                                                    <div style="font-size: 14px; font-weight: 700;">
+                                                        {{ $get->persentase_vote }}%
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <a href="#" class="btn btn-gold btn-sm w-100 mt-3">Detail Finalis</a>
+
+                                            <button class="btn btn-gold btn-sm w-100 mt-3" data-bs-toggle="modal"
+                                                data-bs-target="#mdkandidat{{ $get->id_kandidat }}">Detail Finalis</button>
                                             <div class="quantity-selector mt-2" data-id="{{ $get->id_kandidat }}"
                                                 data-name="{{ $get->nama_kandidat }}"
                                                 data-harga="{{ $detail->harga_event }}">
@@ -139,6 +135,51 @@
                                                 <input type="text" class="form-control text-center qty-input"
                                                     style="width: 50px;" value="0" readonly>
                                                 <button class="btn btn-outline-gold btn-qty plus">+</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" id="mdkandidat{{ $get->id_kandidat }}" tabindex="-1"
+                                    aria-labelledby="mdkandidat{{ $get->id_kandidat }}Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="mdkandidat{{ $get->id_kandidat }}Label">
+                                                    {{ $get->nama_kandidat }}</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body p-0">
+                                                <img src="{{ asset($get->foto_kandidat) }}" width="100%"
+                                                    alt="">
+                                                <div class="px-3 pb-4">
+                                                    <div class="nama-finalis text-center mt-3 mb-2 text-clamp-2"
+                                                        style="font-weight: 700; font-size: 14px;">
+                                                        {{ $get->nama_kandidat }}</div>
+                                                    <div class="no-urut w-100 text-center mb-2"
+                                                        style="font-size: 12px; border-bottom: 1px solid rgba(246, 246, 246, 1); padding-bottom: 12px;">
+                                                        {{ $get->no_kandidat }}</div>
+                                                    <div class="text-center"
+                                                        style="border-bottom: 1px solid rgba(246, 246, 246, 1); padding-bottom: 12px;">
+                                                        <div class="mb-2 d-flex align-items-center justify-content-center"
+                                                            style="font-size: 12px; gap: 6px; font-weight: 500;"><img
+                                                                src="{{ asset('chart.svg') }}" alt="vote">Vote
+                                                        </div>
+                                                        <div style="font-size: 14px; font-weight: 700;">
+                                                            {{ $get->persentase_vote }}%
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-center mt-3">
+                                                        <div class="mb-2 d-flex align-items-center justify-content-center"
+                                                            style="font-size: 12px; gap: 6px; font-weight: 500;">Deskripsi
+                                                            Kandidat
+                                                        </div>
+                                                        <div style="font-size: 14px; font-weight: 700;">
+                                                            {{ $get->deskripsi_kandidat }}
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -170,7 +211,7 @@
                             </div>
                         </div>
                         <div style="margin: 16px 0;"></div>
-                        <div class="card-section card-datetime mt-3 mt-lg-0 mb-3 mb-lg-5">
+                        <div class="card-section card-datetime mt-3 mt-lg-0 mb-3">
                             <h4 class="mb-3" style="font-weight: 600; font-size: 0.875rem;">
                                 Detail Grandfinal</h4>
                             <div class="d-flex align-items-start mb-2" style="gap: 12px;">
@@ -180,18 +221,6 @@
                                 </div>
                                 <div>
                                     @tanggal($detail->tgl_start_event)
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-start mb-2" style="gap: 12px;">
-                                <div class="">
-                                    <img style="width: 24px; height: 24px;"
-                                        src="https://kreenconnect.com/image/icon-vote/Blue/Time.svg" alt="time">
-                                </div>
-                                <div>
-
-                                    16:00 - 20:00
-                                    <i class="text-custom text-blue" style="font-weight: 600;">
-                                        (WIB)</i>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +273,7 @@
     </div>
 
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-gold">
                     <h5 class="modal-title" id="detailModalLabel">Detail Vote</h5>
@@ -282,18 +311,6 @@
 
                         <div class="mb-3">
                             <label class="form-label d-block">Metode Pembayaran</label>
-
-                            {{-- <div id="shopeepay" class="metode-pembayaran" onclick="pilihMetode('shopeepay')">
-                                <div class="d-flex align-items-center">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/ShopeePay_logo.svg"
-                                        alt="ShopeePay" style="height:24px; margin-right:10px;">
-                                    <strong>ShopeePay</strong>
-                                    <span class="badge bg-secondary ms-2">ID</span>
-                                </div>
-                                <div id="check-shopeepay" class="text-success d-none">
-                                    <i class="bi bi-check-circle-fill"></i>
-                                </div>
-                            </div> --}}
 
                             <div id="qris" class="metode-pembayaran" onclick="pilihMetode('qris')">
                                 <div>
@@ -432,8 +449,8 @@
             const metode = $('#metode_pembayaran').val();
 
             let biayaLayanan = 0;
-            if (metode.toLowerCase() === 'shopeepay') {
-                biayaLayanan = totalSemua * 0.015;
+            if (metode.toLowerCase() === 'bni') {
+                biayaLayanan = 4000;
             } else {
                 biayaLayanan = totalSemua * 0.007;
             }
@@ -486,8 +503,8 @@
 
             const totalSemua = hitungTotalKeranjang();
             let biayaLayanan = 0;
-            if (metode_pembayaran.toLowerCase() === 'shopeepay') {
-                biayaLayanan = totalSemua * 0.015;
+            if (metode_pembayaran.toLowerCase() == 'bni') {
+                biayaLayanan = 4000;
             } else {
                 biayaLayanan = totalSemua * 0.007;
             }
@@ -501,6 +518,9 @@
                     subtotal: item.qty * item.harga,
                 });
             });
+
+            // Tampilkan loading overlay
+            $('#loadingOverlay').show();
 
             $.ajax({
                 url: "{{ url('vote/checkout') }}",
@@ -518,7 +538,6 @@
                     event_id: event_id
                 },
                 success: function(res) {
-                    // Reset keranjang dan UI
                     keranjang = {};
                     $('.quantity-selector input.qty-input').val(0);
                     $('#tmp-keranjang').empty();
@@ -532,12 +551,38 @@
                     $('#total-bayar').text('IDR 0');
 
                     window.location.href = "{{ url('vote/detail') }}/" + res.data.token_vote;
-
                 },
                 error: function() {
                     alert('Gagal mengirim data.');
+                },
+                complete: function() {
+                    $('#loadingOverlay').hide();
                 }
             });
+        });
+    </script>
+    <script>
+        document.getElementById('cari').addEventListener('keyup', function() {
+            var query = this.value.toLowerCase();
+            var items = document.querySelectorAll('.kandidat-item');
+            var found = false;
+
+            items.forEach(function(item) {
+                var nama = item.getAttribute('data-nama');
+                if (nama.includes(query)) {
+                    item.style.display = '';
+                    found = true;
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            var alertBox = document.getElementById('notFoundAlert');
+            if (found) {
+                alertBox.style.display = 'none';
+            } else {
+                alertBox.style.display = 'block';
+            }
         });
     </script>
 @endsection
