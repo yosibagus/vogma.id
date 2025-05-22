@@ -21,7 +21,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     // Route untuk halaman dashboard admin
-    Route::get('/home', [HomeController::class, 'index']);
+    Route::get('/dashboard', [HomeController::class, 'index']);
 
 
     // Akses Route
