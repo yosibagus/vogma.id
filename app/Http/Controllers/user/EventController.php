@@ -177,6 +177,9 @@ class EventController extends Controller
                 'message' => $e->getMessage()
             ], 400);
         }
+
+        // return response()->json($status);
+
         return view('user.event.include.status_pesanan', compact('status'));
     }
 
@@ -208,9 +211,46 @@ class EventController extends Controller
             ];
 
             $snapToken = Snap::getSnapToken($params);
-            VotersDetailModel::where('token_vote', $orderId)->update(['snap_token' => $snapToken, 'status_pembayaran' => 'pending']);
+
+            VotersDetailModel::where('token_vote', $orderId)->update(
+                [
+                    'snap_token' => $snapToken,
+                ]
+            );
         }
 
-        return response()->json(['snap_token' => $snapToken]);
+        return response()->json(['snap_token' => $snapToken, 'status' => 'ok']);
+    }
+
+    public function status(Request $request)
+    {
+        $id = $request->input('id');
+
+        try {
+            $status = $this->midtrans->getTransactionStatus($id);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Gagal mengambil status transaksi',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return view('user.event.include.kode_pembayaran', compact('status'));
+    }
+
+    public function statusExpire(Request $request)
+    {
+        $id = $request->input('id');
+
+        try {
+            $status = $this->midtrans->getTransactionStatus($id);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Gagal mengambil status transaksi',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return response()->json($status);
     }
 }

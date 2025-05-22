@@ -13,8 +13,13 @@ class MidtransController extends Controller
     public function handleNotification(Request $request)
     {
         // Konfigurasi Midtrans
+        // Config::$serverKey = config('midtrans.server_key');
+        // Config::$isProduction = config('midtrans.environment') === 'production';
+
         Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.environment') === 'production';
+        Config::$isProduction = config('midtrans.is_production');
+        // Config::$isSanitized = config('midtrans.is_sanitized');
+        // Config::$is3ds = config('midtrans.is_3ds');
 
         // Ambil notifikasi dari Midtrans
         $notification = new Notification();
@@ -33,14 +38,14 @@ class MidtransController extends Controller
 
         if ($transaction == 'settlement') {
             $status_pembayaran = 'success';
+            VotersModel::where('token_vote', $order_id)->update(['status_vote' => 'ok']);
         } elseif ($transaction == 'pending') {
             $status_pembayaran = 'pending';
         } elseif ($transaction == 'deny' || $transaction == 'expire' || $transaction == 'cancel') {
             $status_pembayaran = 'failed';
         }
 
-        // VotersDetailModel::where('token_kode', $order_id)->update(['status_pembayaran' => $status_pembayaran]);
-        // VotersModel::where('token_kode', $order_id)->update(['status_vote' => 'ok']);
+        VotersDetailModel::where('token_vote', $order_id)->update(['status_pembayaran' => $status_pembayaran]);
 
         return response()->json(['message' => 'Notification handled']);
     }

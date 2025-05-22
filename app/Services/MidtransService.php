@@ -32,7 +32,6 @@ class MidtransService
 
         return CoreApi::charge($transactionDetails);
     }
-
     private function bank_transfer($orderId, $amount, $customer, $bank)
     {
         return [

@@ -102,7 +102,8 @@
                                         </div>
                                         <div class="col-md-9 d-flex justify-content-md-end justify-content-center">
                                             <div class="text-center text-md-end text-primary font-weight-bold"
-                                                data-toggle="modal" data-target="#instruksiBayar" style="cursor: pointer">
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                style="cursor: pointer">
                                                 <i class="far fa-exclamation-circle text-primary" aria-hidden="true"></i>
                                                 Instruksi Pembayaran
                                             </div>
@@ -130,7 +131,14 @@
                                         @endif --}}
                                         {{-- <button class="btn btn-gold">Bayar Sekarang</button> --}}
                                     </div>
-                                    <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
+                                    <div id="tmp-qr" class="d-flex justify-content-center">
+                                        {{-- <div class="d-flex justify-content-center my-3" id="spinner-loading">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div> --}}
+                                    </div>
+                                    <p style="font-size: 14px; font-weight: 400; color: #8E919B;">
                                         Kode Pesanan
                                     </p>
                                     <p style="font-size: 14px; font-weight: 400; color: #000;">
@@ -147,10 +155,20 @@
 
                                 </div>
                                 <div class="" style="gap: 16px; margin-top: 16px;">
-                                    <button type="button" class="btn-custom btn-pesan btn-gold w-100 font-weight-bold"
-                                        data-id="{{ $detail->token_vote }}">
-                                        Bayar Sekarang
-                                    </button>
+                                    @if ($detail->snap_token == null)
+                                        <button id="btnBayar" type="button"
+                                            class="btn-custom btn-pesan btn-gold w-100 font-weight-bold"
+                                            data-id="{{ $detail->token_vote }}">
+                                            Generate Pembayaran
+                                        </button>
+                                    @else
+                                        <button id="btnStatus" type="button"
+                                            class="btn-custom btn-gold w-100 font-weight-bold" data-bs-toggle="modal"
+                                            data-bs-target="#statusModal" data-id="{{ $detail->token_vote }}">
+                                            Cek Status Pembayaran
+                                        </button>
+                                    @endif
+
                                 </div>
                             </div>
                         </div>
@@ -244,14 +262,168 @@
             </div>
         </div>
     </div>
+
+    {{-- @include('user.event.include.modal_qris') --}}
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-gold">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Instruksi Pembayaran</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div id="accordion">
+                                <div class="card" style="background-color: #fff; border: none;">
+                                    <!--<div class="card-header" style="border: none;" id="headingOne">-->
+                                    <div class="card-header" style="border: none;" id="headingOne"
+                                        data-toggle="collapse" data-target="#collapseOne1" aria-expanded="true"
+                                        aria-controls="collapseOne1">
+                                        <div style="float:right;"><i class="fas fa-chevron-down"></i></div>
+                                        <div style="font-weight:600;">
+                                            Pembayaran Melalui QRIS
+                                        </div>
+                                    </div>
+
+                                    <div id="collapseOne1" class="collapse show" aria-labelledby="headingOne"
+                                        data-parent="#accordion">
+                                        <div class="card-body">
+                                            <div style="margin-top:-25px; margin-left:-10px;">
+                                                <ol>
+                                                    <li>Silahkan buka aplikasi &quot;<strong>E-wallet</strong>&quot; (Dana,
+                                                        OVO, GoPay, ShopeePay, LinkAja, atau lainnya).</li>
+                                                    <li><strong>Scan</strong> QR code yang tampil pada layar monitor anda.
+                                                    </li>
+                                                    <li>Periksa detail pembayaran Anda di aplikasi, lalu klik
+                                                        &quot;<strong>Bayar</strong>&quot;.</li>
+                                                    <li>Masukan &quot;<strong>PIN</strong>&quot; anda.</li>
+                                                    <li>Transaksi Anda selesai.</li>
+                                                </ol>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn mt-5 w-100 text-white bg-gold" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="instruksiBayar" tabindex="-1" aria-labelledby="instruksiPembayaranLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-white"
+                    style=" background: var(--Gradien1, linear-gradient(0deg, #E31111 0.17%, #F85E5E
+                            99.91%));">
+                    <div class="d-flex flex-column justify-content-end">
+                        <h5 class="modal-title" id="voteModalLabel">Instruksi Pembayaran
+                        </h5>
+                    </div>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
+    {{-- <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"> --}}
+    </script>
+
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+
     <script>
         $(document).ready(function() {
+            $('.btn-pesan').on('click', function() {
+                var orderId = $(this).data('id');
+
+                $.ajax({
+                    url: '/get-snap-token',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: JSON.stringify({
+                        order_id: orderId
+                    }),
+                    beforeSend: function() {
+                        $('#loadingOverlay').show();
+                    },
+                    success: function(response) {
+                        setTimeout(function() {
+                            snap.pay(response.snap_token);
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000); // Reload 1 detik setelah popup muncul
+                        }, 1000); // Delay 1 detik sebelum popup muncul
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Gagal mendapatkan snap token:', error);
+                    },
+                    complete: function() {
+                        $('#loadingOverlay')
+                            .hide();
+                    }
+                });
+            });
+
+            var currentIdPesanan = "{{ $detail->token_vote }}";
+            var snap_token = "{{ $detail->snap_token }}";
+
+            if (snap_token != '') {
+                status(currentIdPesanan);
+            }
+
+            function status(currentIdPesanan) {
+                $("#tmp-qr").html(`
+                    <div class="d-flex justify-content-center my-3" id="spinner-loading">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                `);
+
+                $.ajax({
+                    url: '{{ url('vote/status') }}',
+                    method: 'GET',
+                    dataType: "html",
+                    data: {
+                        id: currentIdPesanan
+                    },
+                    success: function(response) {
+                        // Ganti isi kontainer dengan hasil dari server
+                        $("#tmp-qr").html(response);
+                    },
+                    error: function() {
+                        $("#tmp-qr").html(
+                            '<div class="text-danger text-center mt-3">Gagal memuat data.</div> <a href="{{ url('event/' . $detail->url_event) }}">Lakukan Transaksi Ulang</a>'
+                        );
+                    }
+                });
+            }
+
             $('#statusModal').on('show.bs.modal', function() {
                 var currentIdPesanan = "{{ $detail->token_vote }}";
                 getStatus(currentIdPesanan);
+                status(currentIdPesanan);
+            });
+
+            $(document).on('click', '#btn-segarkan', function() {
+                var currentIdPesanan = "{{ $detail->token_vote }}";
+                getStatus(currentIdPesanan);
+                status(currentIdPesanan);
             });
 
             function getStatus(currentIdPesanan) {
@@ -272,87 +444,6 @@
                     }
                 });
             }
-
-            getExpireTime();
-
-            function getExpireTime() {
-                const expireTime = "{{ $detail->kardaluarsa_pembayaran }}";
-                const expireDate = new Date(expireTime).getTime();
-
-                const timer = setInterval(function() {
-                    const now = new Date().getTime();
-                    const distance = expireDate - now;
-
-                    if (distance < 0) {
-                        clearInterval(timer);
-                        $('#hour').text('00');
-                        $('#min').text('00');
-                        $('#sec').text('00');
-                        // Tambahkan aksi jika waktu habis, misalnya auto-submit form:
-                        // $('#yourFormId').submit();
-                        return;
-                    }
-
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    $('#hour').text(hours.toString().padStart(2, '0'));
-                    $('#min').text(minutes.toString().padStart(2, '0'));
-                    $('#sec').text(seconds.toString().padStart(2, '0'));
-
-                }, 1000);
-            }
-        });
-    </script>
-
-    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-    <script>
-        $(document).ready(function() {
-            $('.btn-pesan').on('click', function() {
-                var orderId = $(this).data('id');
-
-                $.ajax({
-                    url: '/get-snap-token',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: JSON.stringify({
-                        order_id: orderId
-                    }),
-                    beforeSend: function() {
-                        $('#loadingOverlay').show(); // Tampilkan overlay sebelum request
-                    },
-                    success: function(response) {
-                        snap.pay(response.snap_token, {
-                            onSuccess: function(result) {
-                                alert("Pembayaran berhasil!");
-                                console.log(result);
-                            },
-                            onPending: function(result) {
-                                alert("Pembayaran masih pending.");
-                                console.log(result);
-                            },
-                            onError: function(result) {
-                                alert("Terjadi kesalahan.");
-                                console.log(result);
-                            },
-                            onClose: function() {
-                                console.log("Kamu menutup popup pembayaran.");
-                            }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Gagal mendapatkan snap token:', error);
-                    },
-                    complete: function() {
-                        $('#loadingOverlay')
-                    .hide(); // Sembunyikan overlay setelah request selesai
-                    }
-                });
-            });
         });
     </script>
 @endsection

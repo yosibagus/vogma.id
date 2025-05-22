@@ -22,13 +22,21 @@
 
     <div class="row mx-0 px-0 justify-content-center mt-5 mb-5">
         <div class="col-12 col-xl-8">
-            <nav aria-label="breadcrumb">
+            {{-- <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
                     <li class="breadcrumb-item"><a href="{{ url('/vote') }}">Vote</a></li>
                     <li class="breadcrumb-item active" aria-current="page">{{ $detail->nama_event }}</li>
                 </ol>
-            </nav>
+            </nav> --}}
+
+
+            <div class="w-100 text-center">
+                <nav class="nav" style="margin-top: 50px">
+                    <a class="nav-link" href="#" onclick="scrollToSection('deskripsi')">Deskripsi</a>
+                    <a class="nav-link" href="#" onclick="scrollToSection('leaderboard')">Leaderboard</a>
+                </nav>
+            </div>
 
             <div class="row">
                 <section class="left-items col-12 col-lg-8 mt-4">
@@ -52,21 +60,9 @@
                             </div>
                         </div>
 
-                        {{-- <div class="d-flex align-items-center mt-5" style="gap: 1.3125rem;">
-                            <button class="btn-custom btn-accent btn-external" style="" data-toggle="modal"
-                                data-target="#modal-faq">FAQ Vote <i class="fas fa-external-link"
-                                    aria-hidden="true"></i></button>
-                            <button class="btn-custom btn-accent btn-external" style="" data-toggle="modal"
-                                data-target="#modal-tutorial">Tutorial Vote <i class="fas fa-external-link"
-                                    aria-hidden="true"></i></button>
-                            <button class="btn-custom btn-accent btn-external" style="" data-toggle="modal"
-                                data-target="#modal-snk">S&amp;K Voting <i class="fas fa-external-link"
-                                    aria-hidden="true"></i></button>
-                        </div> --}}
-
                         <div class="divider-card"></div>
 
-                        <div class="card-section card-tentang" id="card-tentang">
+                        <div class="card-section card-tentang" id="card-tentang" id="deskripsi">
                             <h4 class="card-title mb-3" style="font-size: 18px;">Deskripsi</h4>
 
                             <div>
@@ -81,7 +77,7 @@
 
                         {{-- finalis --}}
 
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="leaderboard">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1"><span
                                         class="mdi mdi-magnify"></span></span>
@@ -351,7 +347,7 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Kirim & Lanjut</button>
+                        <button type="submit" class="btn btn-gold">Konfirmasi Pembayaran</button>
                     </div>
                 </form>
             </div>
@@ -452,7 +448,7 @@
             if (metode.toLowerCase() === 'bni') {
                 biayaLayanan = 4000;
             } else {
-                biayaLayanan = totalSemua * 0.007;
+                biayaLayanan = totalSemua * 0.009;
             }
 
             const totalBayar = totalSemua + biayaLayanan;
@@ -506,7 +502,7 @@
             if (metode_pembayaran.toLowerCase() == 'bni') {
                 biayaLayanan = 4000;
             } else {
-                biayaLayanan = totalSemua * 0.007;
+                biayaLayanan = totalSemua * 0.009;
             }
             const totalBayar = totalSemua + biayaLayanan;
 
@@ -519,7 +515,6 @@
                 });
             });
 
-            // Tampilkan loading overlay
             $('#loadingOverlay').show();
 
             $.ajax({
@@ -544,8 +539,6 @@
                     $('#cart-bar').hide();
                     $('#formPembayaran')[0].reset();
                     $('#modalPembayaran').modal('hide');
-                    alert('Pembayaran berhasil!');
-
                     $('#total-harga-vote').text('IDR 0');
                     $('#biaya-layanan').text('IDR 0');
                     $('#total-bayar').text('IDR 0');
@@ -584,5 +577,15 @@
                 alertBox.style.display = 'block';
             }
         });
+    </script>
+    <script>
+        function scrollToSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        }
     </script>
 @endsection

@@ -12,3 +12,35 @@ if (!function_exists('tanggal')) {
         return date('d-m-Y, H:i', strtotime($tgl));
     }
 }
+
+if (!function_exists('status_transaksi')) {
+    function status_transaksi($status)
+    {
+        switch ($status) {
+            case 'settlement':
+                $label = 'Berhasil';
+                $class = 'badge bg-success';
+                break;
+            case 'pending':
+                $label = 'Menunggu Pembayaran';
+                $class = 'badge bg-warning text-dark';
+                break;
+            case 'deny':
+            case 'cancel':
+            case 'expire':
+                $label = 'Gagal';
+                $class = 'badge bg-danger';
+                break;
+            case 'refund':
+                $label = 'Dikembalikan';
+                $class = 'badge bg-info text-dark';
+                break;
+            default:
+                $label = ucfirst($status);
+                $class = 'badge bg-secondary';
+                break;
+        }
+
+        return '<span class="' . $class . '">' . $label . '</span>';
+    }
+}
