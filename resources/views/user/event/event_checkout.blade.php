@@ -34,7 +34,7 @@
                 <div class="col-lg-6 col-xl-5" style="margin-bottom:20px;">
                     <div class="card p-3"
                         style="border-radius: 15px; background: linear-gradient(to top, #fff 55%, #FFF6F6 45%); box-shadow: 0px 4px 8px 0px rgba(30, 44, 106, 0.1)">
-                        <section id="timer" class="mt-2"
+                        {{-- <section id="timer" class="mt-2"
                             style="padding: 3px; border-radius: 10px; background-color: #fff6f6;">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -86,7 +86,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </section>
+                        </section> --}}
 
                         <div class="card border mt-4" style="box-shadow: 0px 2px 4px 0px #1E2C6A1A;">
                             <div class="card-body">
@@ -115,7 +115,7 @@
                                             <div id="ls-spinner"></div>
                                             <div class="mt-3">Memuat QR</div>
                                         </div>
-                                        @if ($detail->metode_pembayaran != 'qris')
+                                        {{-- @if ($detail->metode_pembayaran != 'qris')
                                             <div class="text-center">
                                                 <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
                                                 Kode Pembayaran
@@ -127,7 +127,8 @@
                                         @else
                                             <img id="qrCodeImage" style="display: block; width: 300px; height: 300px;"
                                                 src="{!! $detail->kode_pembayaran !!}">
-                                        @endif
+                                        @endif --}}
+                                        {{-- <button class="btn btn-gold">Bayar Sekarang</button> --}}
                                     </div>
                                     <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
                                         Kode Pesanan
@@ -146,12 +147,10 @@
 
                                 </div>
                                 <div class="" style="gap: 16px; margin-top: 16px;">
-                                    <button type="button" class="btn-custom btn-gold w-100 font-weight-bold"
-                                        data-bs-toggle="modal" data-bs-target="#statusModal"
+                                    <button type="button" class="btn-custom btn-pesan btn-gold w-100 font-weight-bold"
                                         data-id="{{ $detail->token_vote }}">
-                                        Cek Status Pesanan
+                                        Bayar Sekarang
                                     </button>
-
                                 </div>
                             </div>
                         </div>
@@ -304,6 +303,56 @@
 
                 }, 1000);
             }
+        });
+    </script>
+
+    <script src="https://app.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.btn-pesan').on('click', function() {
+                var orderId = $(this).data('id');
+
+                $.ajax({
+                    url: '/get-snap-token',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: JSON.stringify({
+                        order_id: orderId
+                    }),
+                    beforeSend: function() {
+                        $('#loadingOverlay').show(); // Tampilkan overlay sebelum request
+                    },
+                    success: function(response) {
+                        snap.pay(response.snap_token, {
+                            onSuccess: function(result) {
+                                alert("Pembayaran berhasil!");
+                                console.log(result);
+                            },
+                            onPending: function(result) {
+                                alert("Pembayaran masih pending.");
+                                console.log(result);
+                            },
+                            onError: function(result) {
+                                alert("Terjadi kesalahan.");
+                                console.log(result);
+                            },
+                            onClose: function() {
+                                console.log("Kamu menutup popup pembayaran.");
+                            }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Gagal mendapatkan snap token:', error);
+                    },
+                    complete: function() {
+                        $('#loadingOverlay')
+                    .hide(); // Sembunyikan overlay setelah request selesai
+                    }
+                });
+            });
         });
     </script>
 @endsection

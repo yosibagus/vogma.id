@@ -99,3 +99,5 @@ Route::post('vote/checkout', [EventController::class, 'checkout']);
 
 Route::get('/vote/detail/{id}', [EventController::class, 'checkoutDetail']);
 Route::get('/vote/statusPesanan', [EventController::class, 'statusPesanan']);
+
+Route::post('/get-snap-token', [EventController::class, 'getSnapToken']);

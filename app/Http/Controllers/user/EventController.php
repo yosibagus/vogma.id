@@ -12,6 +12,8 @@ use App\Services\MidtransService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class EventController extends Controller
 {
@@ -101,28 +103,28 @@ class EventController extends Controller
             ];
         }
 
-        $customer = [
-            'first_name' => $nama,
-            'email' => $email,
-            'phone' => $no_hp,
-        ];
+        // $customer = [
+        //     'first_name' => $nama,
+        //     'email' => $email,
+        //     'phone' => $no_hp,
+        // ];
 
         try {
             DB::beginTransaction();
 
             VotersModel::insert($votes);
 
-            $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
+            // $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
 
-            $qr_url = '';
+            // $qr_url = '';
 
-            if ($metode_pembayaran != 'qris') {
-                $vaObject = collect($transaction->va_numbers)->firstWhere('bank', strtolower($metode_pembayaran));
-                $qr_url = $vaObject->va_number ?? null;
-            } else {
-                $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
-            }
-            $expiry_time = $transaction->expiry_time ?? null;
+            // if ($metode_pembayaran != 'qris') {
+            //     $vaObject = collect($transaction->va_numbers)->firstWhere('bank', strtolower($metode_pembayaran));
+            //     $qr_url = $vaObject->va_number ?? null;
+            // } else {
+            //     $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
+            // }
+            // $expiry_time = $transaction->expiry_time ?? null;
 
             $vote_detail = [
                 'token_vote' => $token_vote,
@@ -134,8 +136,7 @@ class EventController extends Controller
                 'total_harga' => $total_harga_vote,
                 'biaya_layanan' => $biaya_layanan,
                 'total_pembayaran' => $total_bayar,
-                'kode_pembayaran' => $qr_url,
-                'kardaluarsa_pembayaran' => $expiry_time
+                'kode_pembayaran' => '',
             ];
 
             VotersDetailModel::create($vote_detail);
@@ -144,8 +145,7 @@ class EventController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $vote_detail,
-                'transaction' => $transaction,
+                'data' => $vote_detail
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -178,5 +178,39 @@ class EventController extends Controller
             ], 400);
         }
         return view('user.event.include.status_pesanan', compact('status'));
+    }
+
+    public function getSnapToken(Request $request)
+    {
+        Config::$serverKey = config('midtrans.server_key');
+        Config::$isProduction = config('midtrans.is_production');
+        Config::$isSanitized = config('midtrans.is_sanitized');
+        Config::$is3ds = config('midtrans.is_3ds');
+
+        $orderId = $request->order_id;
+
+        $transaksi = VotersDetailModel::where('token_vote', $orderId)->first();
+
+        if ($transaksi->snap_token != null) {
+            $snapToken = $transaksi->snap_token;
+        } else {
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $orderId,
+                    'gross_amount' => $transaksi->total_pembayaran,
+                ],
+                'customer_details' => [
+                    'first_name' => $transaksi->nama_voters,
+                    'email' => $transaksi->email_voters,
+                    'phone' => $transaksi->nohp_voters,
+                ],
+                'enabled_payments' => ['other_qris']
+            ];
+
+            $snapToken = Snap::getSnapToken($params);
+            VotersDetailModel::where('token_vote', $orderId)->update(['snap_token' => $snapToken, 'status_pembayaran' => 'pending']);
+        }
+
+        return response()->json(['snap_token' => $snapToken]);
     }
 }
