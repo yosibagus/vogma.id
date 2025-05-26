@@ -64,13 +64,13 @@
     <li>
         <b class="">Report</b>
     </li>
-
+{{-- 
     <li>
         <a href="/event-votes" class="ai-icon" aria-expanded="false">
             <i class="flaticon-381-notepad"></i>
             <span class="nav-text">Voters</span>
         </a>
-    </li>
+    </li> --}}
 
     <li>
         <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
@@ -78,7 +78,7 @@
             <span class="nav-text">Transaksi</span>
         </a>
         <ul aria-expanded="false">
-            <li><a href="/transaksi/detail">Transaksi Event</a></li>
+            <li><a href="/event">Transaksi Event</a></li>
             <li><a href="/transaksi/all">Semua Transaksi</a></li>
         </ul>
     </li>

@@ -117,6 +117,8 @@
     ***********************************-->
     <!-- Required vendors -->
     @include('admin.components.script')
+
+    @yield('script')
 </body>
 
 </html>

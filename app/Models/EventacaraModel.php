@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\participation;
+use Illuminate\Support\Facades\DB;
 
 class EventacaraModel extends Model
 {
@@ -36,5 +37,12 @@ class EventacaraModel extends Model
     public function kandidat()
     {
         return $this->hasMany(FinalisModel::class, 'event_id', 'id_event');
+    }
+
+    public static function getDataEvent()
+    {
+        $data = DB::table('event')
+            ->join('penyelenggara', 'event.penyelenggara_id', 'penyelenggara.id_penyelenggara');
+        return $data;
     }
 }

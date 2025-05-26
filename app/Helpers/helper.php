@@ -44,3 +44,30 @@ if (!function_exists('status_transaksi')) {
         return '<span class="' . $class . '">' . $label . '</span>';
     }
 }
+
+
+if (!function_exists('status')) {
+    function status($status)
+    {
+        switch ($status) {
+            case 'success':
+                $label = 'Success';
+                $class = 'badge bg-success';
+                break;
+            case 'pending':
+                $label = 'Pending';
+                $class = 'badge bg-warning text-dark';
+                break;
+            case 'failed':
+                $label = 'Failed';
+                $class = 'badge bg-danger';
+                break;
+            default:
+                $label = 'Pending';
+                $class = 'badge bg-secondary';
+                break;
+        }
+
+        return '<small class="' . $class . '"><small>' . $label . '</small></small>';
+    }
+}

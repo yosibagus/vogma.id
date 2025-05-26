@@ -9,22 +9,6 @@
     <meta property="og:type" content="website">
 @endsection
 @section('content')
-    {{-- <style>
-        @media screen and (max-width: 992px) {
-            #card-left {
-                background-color: unset;
-                background-clip: unset;
-                box-shadow: none;
-                padding: 0;
-            }
-
-            .divider-card {
-                max-width: 100%;
-                margin: 0;
-            }
-        }
-    </style> --}}
-
     @include('user.layouts.menu_event')
 
     <style>
@@ -59,14 +43,7 @@
     <div class="row mx-0 px-0 justify-content-center mt-5 mb-5">
         <div class="col-12 col-xl-8">
 
-            <div class="w-100 text-center">
-                <nav class="nav" style="margin-top: 50px">
-                    <a class="nav-link" href="#" onclick="scrollToSection('deskripsi')">Deskripsi</a>
-                    <a class="nav-link" href="#" onclick="scrollToSection('leaderboard')">Leaderboard</a>
-                </nav>
-            </div>
-
-            <div class="row">
+            <div class="row" style="margin-top: 40px">
                 <section class="left-items col-12 col-lg-8 mt-4">
                     <div class="card" style="border-radius: 20px;">
                         <img src="{{ asset($detail->benner_event) }}" style="max-width: 100%; border-radius: 20px;"
@@ -88,9 +65,9 @@
                             </div>
                         </div>
 
-                        <div class="divider-card"></div>
+                        <div class="divider-card" id="deskripsi"></div>
 
-                        <div class="card-section card-tentang" id="card-tentang" id="deskripsi">
+                        <div class="card-section card-tentang" id="card-tentang">
                             <h4 class="card-title mb-3" style="font-size: 18px;">Deskripsi</h4>
 
                             <div>
@@ -100,7 +77,8 @@
 
                         {{-- backup top 3 --}}
                         <div class="divider-card"></div>
-                        <div class="d-flex bg-gold flex-column justify-content-center align-items-center text-white text-center w-100 p-3"
+                        <div id="leaderboard"
+                            class="d-flex bg-gold flex-column justify-content-center align-items-center text-white text-center w-100 p-3"
                             style="gap: 0.5rem;">
                             <img src="https://kreenconnect.com/image/icon-vote/Blue/crown-icon.svg" alt="leaderboard">
                             Leaderboard <br>{{ $detail->nama_event }}
@@ -146,7 +124,8 @@
                                     </div>
                                     <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-2-wrapper"
                                         style="opacity: 1; pointer-events: auto">
-                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-2">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-2"
+                                            data-nama="{{ $second->nama_kandidat }}">
                                             Vote
                                         </button>
                                     </div>
@@ -183,7 +162,8 @@
                                     </div>
                                     <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-1-wrapper"
                                         style="opacity: 1; pointer-events: auto">
-                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-1">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-1"
+                                            data-nama="{{ $first->nama_kandidat }}">
                                             Vote
                                         </button>
                                     </div>
@@ -220,7 +200,8 @@
                                     </div>
                                     <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-3-wrapper"
                                         style="opacity: 1; pointer-events: auto">
-                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-3">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-3"
+                                            data-nama="{{ $third->nama_kandidat }}"">
                                             Vote
                                         </button>
                                     </div>
@@ -234,7 +215,7 @@
 
                         {{-- finalis --}}
 
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="leaderboard">
+                        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="finalis">
                             <div class="input-group mb-3 sticky-mobile-search shadow-sm">
                                 <span class="input-group-text" id="basic-addon1"><span
                                         class="mdi mdi-magnify"></span></span>
@@ -711,6 +692,38 @@
             });
         });
     </script>
+    <script>
+        document.querySelectorAll('.btn-vote-juara').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const nama = this.getAttribute('data-nama');
+                const input = document.getElementById('cari');
+                input.value = nama;
+                input.focus();
+
+                // Trigger pencarian
+                input.dispatchEvent(new Event('keyup'));
+
+                // Setelah filter selesai, scroll dengan offset ke bawah
+                setTimeout(function() {
+                    const items = document.querySelectorAll('.kandidat-item');
+                    for (let item of items) {
+                        if (item.style.display !== 'none') {
+                            const rect = item.getBoundingClientRect();
+                            const offset = 45; // Tambah jarak scroll ke bawah
+                            const scrollTop = window.scrollY + rect.top - offset;
+
+                            window.scrollTo({
+                                top: scrollTop,
+                                behavior: 'smooth'
+                            });
+                            break;
+                        }
+                    }
+                }, 100); // biar filter selesai dulu
+            });
+        });
+    </script>
+
     <script>
         document.getElementById('cari').addEventListener('keyup', function() {
             var query = this.value.toLowerCase();

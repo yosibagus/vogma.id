@@ -124,6 +124,7 @@ class EventController extends Controller
                 'event_id' => $request->event_id,
                 'kuantitas_vote' => $item['qty'],
                 'total_harga_vote' => $item['subtotal'],
+                'status_vote' => config('midtrans.free') == 'tidak' ? 'no' : 'free-no',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
@@ -163,7 +164,8 @@ class EventController extends Controller
                 'biaya_layanan' => $biaya_layanan,
                 'total_pembayaran' => $total_bayar,
                 'kode_pembayaran' => $qr_url,
-                'kardaluarsa_pembayaran' => $expiry_time
+                'kardaluarsa_pembayaran' => $expiry_time,
+                'free' => config('midtrans.free') == 'tidak' ? 'false' : 'true'
             ];
 
             VotersDetailModel::create($vote_detail);

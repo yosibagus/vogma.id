@@ -38,7 +38,11 @@ class MidtransController extends Controller
 
         if ($transaction == 'settlement') {
             $status_pembayaran = 'success';
-            VotersModel::where('token_vote', $order_id)->update(['status_vote' => 'ok']);
+            if (config('midtrans.free') == 'tidak') {
+                VotersModel::where('token_vote', $order_id)->update(['status_vote' => 'ok']);
+            } else {
+                VotersModel::where('token_vote', $order_id)->update(['status_vote' => 'free-ok']);
+            }
         } elseif ($transaction == 'pending') {
             $status_pembayaran = 'pending';
         } elseif ($transaction == 'deny' || $transaction == 'expire' || $transaction == 'cancel') {

@@ -21,7 +21,7 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
 
     // Route untuk halaman dashboard admin
-    Route::get('/dashboard', [HomeController::class, 'index']);
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
 
 
     // Akses Route
@@ -75,10 +75,12 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::get('/event', [TransaksiController::class, 'index']);
+    Route::get('/event/transaksi/{id}', [TransaksiController::class, 'detail']);
 
     // Route untuk halaman detail event votes transaksi
     Route::prefix('transaksi')->group(function () {
-        Route::get('/detail', [TransaksiController::class, 'detail'])->name('votes.detail');
+        // Route::get('/detail', [TransaksiController::class, 'detail'])->name('votes.detail');
         Route::get('/all', [TransaksiController::class, 'all_transaksi'])->name('votes.all');
     });
 
