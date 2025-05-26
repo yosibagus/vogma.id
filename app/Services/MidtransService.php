@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\EventacaraModel;
+use App\Models\VotersDetailModel;
+use App\Models\VotersModel;
 use Midtrans\Config;
 use Midtrans\Transaction;
 use Midtrans\CoreApi;
@@ -22,12 +25,12 @@ class MidtransService
     }
 
 
-    public function createBankTransferTransaction($orderId, $amount, $customer, $bank)
+    public function createBankTransferTransaction($orderId, $amount, $customer, $bank, $items)
     {
         if ($bank == 'bni' || $bank == 'bca' || $bank == 'bri') {
             $transactionDetails = $this->bank_transfer($orderId, $amount, $customer, $bank);
         } else if ($bank == 'qris') {
-            $transactionDetails = $this->qris_transfer($orderId, $amount, $customer, $bank);
+            $transactionDetails = $this->qris_transfer($orderId, $amount, $customer, $bank, $items);
         }
 
         return CoreApi::charge($transactionDetails);
@@ -47,20 +50,21 @@ class MidtransService
         ];
     }
 
-    private function qris_transfer($orderId, $amount, $customer)
+    private function qris_transfer($orderId, $amount, $customer, $bank, $items)
     {
-
-
-        return [
+        $data =  [
             "payment_type" => "qris",
             "transaction_details" => [
                 "order_id" => $orderId,
                 "gross_amount" => $amount
             ],
             "customer_details" => $customer,
+            "item_details" => $items,
             "qris" => [
                 "acquirer" => "gopay"
             ]
         ];
+
+        return $data;
     }
 }

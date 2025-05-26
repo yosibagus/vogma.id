@@ -586,7 +586,7 @@
             if (metode.toLowerCase() === 'bni') {
                 biayaLayanan = 4000;
             } else {
-                biayaLayanan = totalSemua * 0.009;
+                biayaLayanan = totalSemua * 0.010;
             }
 
             const totalBayar = totalSemua + biayaLayanan;
@@ -640,7 +640,7 @@
             if (metode_pembayaran.toLowerCase() == 'bni') {
                 biayaLayanan = 4000;
             } else {
-                biayaLayanan = totalSemua * 0.009;
+                biayaLayanan = totalSemua * 0.010;
             }
             const totalBayar = totalSemua + biayaLayanan;
 

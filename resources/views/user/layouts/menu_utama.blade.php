@@ -56,7 +56,7 @@
             <div class="row">
                 <div class="col-12 text-dark">
                     <h5>Belum punya akun?</h5>
-                    <p>Login untuk menggunakan semua fitur di Kreen</p>
+                    <p>Login untuk menggunakan semua fitur di Vogma</p>
                 </div>
                 <div class="col-6">
                     <a href="" class="btn btn-outline-gold w-100 py-3">Daftar Event</a>
@@ -70,7 +70,7 @@
             <div class="row">
                 <div class="col-12 text-dark">
                     <h5>Belum punya akun?</h5>
-                    <p>Login untuk menggunakan semua fitur di Kreen</p>
+                    <p>Login untuk menggunakan semua fitur di Vogma</p>
                 </div>
                 <div class="col-6">
                     <a href="" class="btn btn-outline-gold w-100 py-3">Daftar Event</a>

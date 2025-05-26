@@ -115,8 +115,9 @@ class EventController extends Controller
         $nama = $request->nama;
         $no_hp = $request->no_hp;
         $email = $request->email;
-
+        $event = EventacaraModel::where('id_event', $request->event_id)->first();
         $votes = [];
+        $productItem = [];
         foreach ($items as $item) {
             $votes[] = [
                 'token_vote' => $token_vote,
@@ -128,7 +129,23 @@ class EventController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ];
+
+            $nkandidat = FinalisModel::select('nama_kandidat')->where('id_kandidat', $item['id'])->first();
+
+            $productItem[] = [
+                'id' => (int) $item['id'],
+                'price' => (int) $event->harga_event,
+                'quantity' => (int) $item['qty'],
+                'name' => $nkandidat->nama_kandidat,
+            ];
         }
+
+        $productItem[] = [
+            'id' => 'Fee',
+            'price' => (int) $biaya_layanan,
+            'quantity' => 1,
+            'name' => 'Biaya Layanan',
+        ];
 
         $customer = [
             'first_name' => $nama,
@@ -136,12 +153,12 @@ class EventController extends Controller
             'phone' => $no_hp,
         ];
 
+
         try {
             DB::beginTransaction();
 
             VotersModel::insert($votes);
-
-            $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
+            $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran, $productItem);
 
             $qr_url = '';
 
@@ -236,6 +253,12 @@ class EventController extends Controller
                     'name' => $get->nama_kandidat,
                 ];
             }
+            $items[] = [
+                'id' => 'Fee',
+                'price' => $transaksi->biaya_layanan,
+                'quantity' => 1,
+                'name' => 'Biaya Layanan',
+            ];
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
