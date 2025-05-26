@@ -338,7 +338,7 @@ body {
 }
 
 .top-3 {
-    margin-top: 255px;
+    margin-top: 120px;
 }
 
 .info-juara-1 {
@@ -399,7 +399,7 @@ body {
 
 @media (max-width: 991.73px) {
     .top-3 {
-        margin-top: 250px;
+        margin-top: 110px;
     }
 
     .card-section.card-datetime {
@@ -409,7 +409,7 @@ body {
 
 @media (max-width: 768px) {
     .top-3 {
-        margin-top: 200px;
+        margin-top: 110px;
     }
 
     .card-top3-1 {

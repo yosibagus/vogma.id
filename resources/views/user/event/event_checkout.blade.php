@@ -7,7 +7,6 @@
         }
 
         @media only screen and (max-width: 575px) {
-
             .jam {
                 font-size: 18px;
             }
@@ -34,7 +33,7 @@
                 <div class="col-lg-6 col-xl-5" style="margin-bottom:20px;">
                     <div class="card p-3"
                         style="border-radius: 15px; background: linear-gradient(to top, #fff 55%, #FFF6F6 45%); box-shadow: 0px 4px 8px 0px rgba(30, 44, 106, 0.1)">
-                        {{-- <section id="timer" class="mt-2"
+                        <section id="timer" class="mt-2"
                             style="padding: 3px; border-radius: 10px; background-color: #fff6f6;">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -75,7 +74,6 @@
                                                         </div>
                                                     </div>
 
-
                                                 </div>
                                             </div>
                                         </div>
@@ -86,7 +84,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </section> --}}
+                        </section>
 
                         <div class="card border mt-4" style="box-shadow: 0px 2px 4px 0px #1E2C6A1A;">
                             <div class="card-body">
@@ -94,8 +92,7 @@
                                     <div class="row align-items-center justify-content-between">
                                         <div class="col-md-3 text-center text-md-left">
                                             @if ($detail->metode_pembayaran == 'qris')
-                                                <img src="{{ asset('qris.png') }}" alt="Payment Method"
-                                                    style="width: 100%; max-width: 200px;">
+                                                <img src="{{ asset('qris.png') }}" alt="Payment Method" width="80">
                                             @else
                                                 Bank Transfer
                                             @endif
@@ -116,19 +113,7 @@
                                             <div id="ls-spinner"></div>
                                             <div class="mt-3">Memuat QR</div>
                                         </div>
-                                        {{-- @if ($detail->metode_pembayaran != 'qris')
-                                            <div class="text-center">
-                                                <p style="margin-top:50px; font-size: 14px; font-weight: 400; color: #8E919B;">
-                                                Kode Pembayaran
-                                            </p>
-                                            <h5 style="font-weight: 400; color: #000;">
-                                                {{ $detail->kode_pembayaran }}
-                                            </h5>
-                                            </div>
-                                        @else
-                                            <img id="qrCodeImage" style="display: block; width: 300px; height: 300px;"
-                                                src="{!! $detail->kode_pembayaran !!}">
-                                        @endif --}}
+
                                         {{-- <button class="btn btn-gold">Bayar Sekarang</button> --}}
                                     </div>
                                     <div id="tmp-qr" class="d-flex justify-content-center">
@@ -145,7 +130,6 @@
                                         INV/{!! strtoupper($detail->token_vote) !!}/2025
                                     </p>
 
-
                                     <p class="mt-md-3" style="font-size: 14px; font-weight: 400; color: #8E919B;">
                                         Total Pembayaran (IDR)
                                     </p>
@@ -155,19 +139,12 @@
 
                                 </div>
                                 <div class="" style="gap: 16px; margin-top: 16px;">
-                                    @if ($detail->snap_token == null)
-                                        <button id="btnBayar" type="button"
-                                            class="btn-custom btn-pesan btn-gold w-100 font-weight-bold"
-                                            data-id="{{ $detail->token_vote }}">
-                                            Generate Pembayaran
-                                        </button>
-                                    @else
-                                        <button id="btnStatus" type="button"
-                                            class="btn-custom btn-gold w-100 font-weight-bold" data-bs-toggle="modal"
-                                            data-bs-target="#statusModal" data-id="{{ $detail->token_vote }}">
-                                            Cek Status Pembayaran
-                                        </button>
-                                    @endif
+
+                                    <button id="btnStatus" type="button" class="btn-custom btn-gold w-100 font-weight-bold"
+                                        data-bs-toggle="modal" data-bs-target="#statusModal"
+                                        data-id="{{ $detail->token_vote }}">
+                                        Cek Status Pembayaran
+                                    </button>
 
                                 </div>
                             </div>
@@ -224,7 +201,6 @@
                                     </td>
                                 </tr>
 
-
                                 <tr>
 
                                 </tr>
@@ -237,7 +213,6 @@
                                         {{ rupiah($detail->total_pembayaran) }}
                                     </td>
                                 </tr>
-
 
                             </tbody>
                         </table>
@@ -306,7 +281,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn mt-5 w-100 text-white bg-gold" data-bs-dismiss="modal">Tutup</button>
+                                <button type="button" class="btn mt-5 w-100 text-white bg-gold"
+                                    data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>
@@ -345,46 +321,44 @@
 
     <script>
         $(document).ready(function() {
-            $('.btn-pesan').on('click', function() {
-                var orderId = $(this).data('id');
+            // $('.btn-pesan').on('click', function() {
+            //     var orderId = $(this).data('id');
 
-                $.ajax({
-                    url: '/get-snap-token',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: JSON.stringify({
-                        order_id: orderId
-                    }),
-                    beforeSend: function() {
-                        $('#loadingOverlay').show();
-                    },
-                    success: function(response) {
-                        setTimeout(function() {
-                            snap.pay(response.snap_token);
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000); // Reload 1 detik setelah popup muncul
-                        }, 1000); // Delay 1 detik sebelum popup muncul
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Gagal mendapatkan snap token:', error);
-                    },
-                    complete: function() {
-                        $('#loadingOverlay')
-                            .hide();
-                    }
-                });
-            });
+            //     $.ajax({
+            //         url: '/get-snap-token',
+            //         method: 'POST',
+            //         contentType: 'application/json',
+            //         headers: {
+            //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //         },
+            //         data: JSON.stringify({
+            //             order_id: orderId
+            //         }),
+            //         beforeSend: function() {
+            //             $('#loadingOverlay').show();
+            //         },
+            //         success: function(response) {
+            //             setTimeout(function() {
+            //                 snap.pay(response.snap_token);
+            //                 setTimeout(function() {
+            //                     location.reload();
+            //                 }, 1000); 
+            //             }, 1000);
+            //         },
+            //         error: function(xhr, status, error) {
+            //             console.error('Gagal mendapatkan snap token:', error);
+            //         },
+            //         complete: function() {
+            //             $('#loadingOverlay')
+            //                 .hide();
+            //         }
+            //     });
+            // });
 
             var currentIdPesanan = "{{ $detail->token_vote }}";
             var snap_token = "{{ $detail->snap_token }}";
 
-            if (snap_token != '') {
-                status(currentIdPesanan);
-            }
+            status(currentIdPesanan);
 
             function status(currentIdPesanan) {
                 $("#tmp-qr").html(`
@@ -415,6 +389,9 @@
             }
 
             $('#statusModal').on('show.bs.modal', function() {
+                $('#jawabanYa').prop('checked', true).trigger('change');
+                // setTimeout(function() {
+                // }, 100);
                 var currentIdPesanan = "{{ $detail->token_vote }}";
                 getStatus(currentIdPesanan);
                 status(currentIdPesanan);
@@ -443,6 +420,54 @@
                             '<div class="text-danger">Gagal memuat data.</div>');
                     }
                 });
+            }
+        });
+    </script>
+
+    <script>
+        // Konversi waktu_kadaluarsa ke format Date
+        const waktuKadaluarsa = "{{ $detail->kardaluarsa_pembayaran }}";
+        const expiration = new Date(waktuKadaluarsa.replace(/-/g, '/')); // replace untuk kompatibilitas
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = expiration - now;
+
+            if (diff <= 0) {
+                document.getElementById("hour").innerText = "00";
+                document.getElementById("min").innerText = "00";
+                document.getElementById("sec").innerText = "00";
+
+                clearInterval(timer);
+                return;
+            }
+
+            const hours = String(Math.floor((diff / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+            const minutes = String(Math.floor((diff / (1000 * 60)) % 60)).padStart(2, '0');
+            const seconds = String(Math.floor((diff / 1000) % 60)).padStart(2, '0');
+
+            document.getElementById("hour").innerText = hours;
+            document.getElementById("min").innerText = minutes;
+            document.getElementById("sec").innerText = seconds;
+        }
+
+        const timer = setInterval(updateCountdown, 1000);
+        updateCountdown(); // panggil awal biar tidak delay 1 detik
+    </script>
+    <script>
+        $(document).on('change', 'input[name="jawaban"]', function() {
+            const yaLabel = $('#labelYa');
+            const tidakLabel = $('#labelTidak');
+
+            // Reset semua label
+            yaLabel.removeClass('bg-gold text-white');
+            tidakLabel.removeClass('bg-gold text-white');
+
+            // Tambahkan background sesuai pilihan
+            if (this.id === 'jawabanYa') {
+                yaLabel.addClass('bg-gold text-white');
+            } else if (this.id === 'jawabanTidak') {
+                tidakLabel.addClass('bg-gold text-white');
             }
         });
     </script>

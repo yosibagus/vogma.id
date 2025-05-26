@@ -24,12 +24,12 @@ class EventController extends Controller
         $this->midtrans = $midtrans;
     }
 
-
     public function index($url)
     {
         $data['detail'] = EventacaraModel::where('url_event', $url)->first();
         $data['penyelenggara'] = PenyelenggaraModel::where('id_penyelenggara', $data['detail']->penyelenggara_id)->first();
         $data['finalis'] = $this->_getDataFinalis($data['detail']->id_event);
+        $data['toptiga'] = $this->_getTop3Finalis($data['detail']->id_event);
         return view('user.event.event_detail', $data);
     }
 
@@ -41,31 +41,26 @@ class EventController extends Controller
 
     private function _getDataFinalis($idEvent)
     {
-        // Ambil semua kandidat finalis untuk event ini
         $finalis = DB::table('event_kandidat')
             ->where('event_id', $idEvent)
             ->get();
 
-        // Hitung total vote semua kandidat event ini
         $totalVotes = DB::table('event_votes')
             ->join('event_kandidat', 'event_votes.kandidat_id', '=', 'event_kandidat.id_kandidat')
             ->where('event_kandidat.event_id', $idEvent)
             ->where('event_votes.status_vote', 'ok')
             ->sum('event_votes.kuantitas_vote');
 
-        // Buat array hasil
         $result = [];
 
         foreach ($finalis as $f) {
-            // Hitung vote kandidat ini
             $jumlahVote = DB::table('event_votes')
                 ->where('kandidat_id', $f->id_kandidat)
+                ->where('status_vote', 'ok')
                 ->sum('kuantitas_vote');
 
-            // Hitung persentase
             $persentase = $totalVotes > 0 ? round(($jumlahVote / $totalVotes) * 100, 2) : 0;
 
-            // Tambahkan property ke object stdClass agar bisa dipakai di blade
             $f->jumlah_vote = $jumlahVote;
             $f->persentase_vote = $persentase;
 
@@ -76,11 +71,42 @@ class EventController extends Controller
         return collect($result)->sortByDesc('persentase_vote')->values();
     }
 
+    private function _getTop3Finalis($idEvent)
+    {
+        $finalis = DB::table('event_kandidat')
+            ->where('event_id', $idEvent)
+            ->get();
+
+        $totalVotes = DB::table('event_votes')
+            ->join('event_kandidat', 'event_votes.kandidat_id', '=', 'event_kandidat.id_kandidat')
+            ->where('event_kandidat.event_id', $idEvent)
+            ->where('event_votes.status_vote', 'ok')
+            ->sum('event_votes.kuantitas_vote');
+
+        $result = [];
+
+        foreach ($finalis as $f) {
+            $jumlahVote = DB::table('event_votes')
+                ->where('kandidat_id', $f->id_kandidat)
+                ->where('status_vote', 'ok')
+                ->sum('kuantitas_vote');
+
+            $persentase = $totalVotes > 0 ? round(($jumlahVote / $totalVotes) * 100, 2) : 0;
+
+            $f->jumlah_vote = $jumlahVote;
+            $f->persentase_vote = $persentase;
+
+            $result[] = $f;
+        }
+
+        // Ambil hanya 3 tertinggi berdasarkan persentase_vote
+        return collect($result)->sortByDesc('persentase_vote')->take(3)->values();
+    }
 
 
     public function checkout(Request $request)
     {
-        $token_vote = uniqid();
+        $token_vote = 'test' . uniqid();
         $items = $request->input('items');
         $total_harga_vote = $request->total_harga_vote;
         $biaya_layanan = $request->biaya_layanan;
@@ -103,28 +129,28 @@ class EventController extends Controller
             ];
         }
 
-        // $customer = [
-        //     'first_name' => $nama,
-        //     'email' => $email,
-        //     'phone' => $no_hp,
-        // ];
+        $customer = [
+            'first_name' => $nama,
+            'email' => $email,
+            'phone' => $no_hp,
+        ];
 
         try {
             DB::beginTransaction();
 
             VotersModel::insert($votes);
 
-            // $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
+            $transaction = $this->midtrans->createBankTransferTransaction($token_vote, $total_bayar, $customer, $metode_pembayaran);
 
-            // $qr_url = '';
+            $qr_url = '';
 
-            // if ($metode_pembayaran != 'qris') {
-            //     $vaObject = collect($transaction->va_numbers)->firstWhere('bank', strtolower($metode_pembayaran));
-            //     $qr_url = $vaObject->va_number ?? null;
-            // } else {
-            //     $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
-            // }
-            // $expiry_time = $transaction->expiry_time ?? null;
+            if ($metode_pembayaran != 'qris') {
+                $vaObject = collect($transaction->va_numbers)->firstWhere('bank', strtolower($metode_pembayaran));
+                $qr_url = $vaObject->va_number ?? null;
+            } else {
+                $qr_url = collect($transaction->actions)->firstWhere('name', 'generate-qr-code')->url ?? null;
+            }
+            $expiry_time = $transaction->expiry_time ?? null;
 
             $vote_detail = [
                 'token_vote' => $token_vote,
@@ -136,7 +162,8 @@ class EventController extends Controller
                 'total_harga' => $total_harga_vote,
                 'biaya_layanan' => $biaya_layanan,
                 'total_pembayaran' => $total_bayar,
-                'kode_pembayaran' => '',
+                'kode_pembayaran' => $qr_url,
+                'kardaluarsa_pembayaran' => $expiry_time
             ];
 
             VotersDetailModel::create($vote_detail);
@@ -193,10 +220,20 @@ class EventController extends Controller
         $orderId = $request->order_id;
 
         $transaksi = VotersDetailModel::where('token_vote', $orderId)->first();
-
+        $event = EventacaraModel::where('id_event', $transaksi->event_id)->first();
         if ($transaksi->snap_token != null) {
             $snapToken = $transaksi->snap_token;
         } else {
+            $items = [];
+            $vote = VotersModel::getDataVotes($orderId)->get();
+            foreach ($vote as $get) {
+                $items[] = [
+                    'id' => $get->no_kandidat,
+                    'price' => $event->harga_event,
+                    'quantity' => $get->kuantitas_vote,
+                    'name' => $get->nama_kandidat,
+                ];
+            }
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -207,6 +244,7 @@ class EventController extends Controller
                     'email' => $transaksi->email_voters,
                     'phone' => $transaksi->nohp_voters,
                 ],
+                'item_details' => $items,
                 'enabled_payments' => ['other_qris']
             ];
 
@@ -228,6 +266,8 @@ class EventController extends Controller
 
         try {
             $status = $this->midtrans->getTransactionStatus($id);
+            $vote = VotersDetailModel::where('token_vote', $id)->first();
+            $detail = EventacaraModel::where('id_event', $vote->event_id)->first();
         } catch (\Exception $e) {
             return response()->json([
                 'error' => 'Gagal mengambil status transaksi',
@@ -235,7 +275,7 @@ class EventController extends Controller
             ], 400);
         }
 
-        return view('user.event.include.kode_pembayaran', compact('status'));
+        return view('user.event.include.kode_pembayaran', compact('status', 'detail', 'vote'));
     }
 
     public function statusExpire(Request $request)

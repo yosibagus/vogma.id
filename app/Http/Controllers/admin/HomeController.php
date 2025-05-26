@@ -16,8 +16,7 @@ class HomeController extends Controller
         $total_penyelenggara = PenyelenggaraModel::count();
         $total_event = EventacaraModel::count();
         $total_kandidat = FinalisModel::count();
-        $total_pembayaran = TransaksiModel::count();
-        $total_pembayaran = TransaksiModel::sum('total_pembayaran');
+        $total_pembayaran = TransaksiModel::where('status_pembayaran', 'success')->sum('total_harga');
 
 
         $target_pendapatan = 1000000000;

@@ -1,5 +1,13 @@
 @extends('user.layouts.template')
-
+@section('meta')
+    <meta name="keywords" content="{{ $detail->nama_event }}">
+    <meta name="description" content="{{ $detail->deskripsi_event }}">
+    <meta property="og:title" content="{{ $detail->nama_event }}">
+    <meta property="og:description" content="{{ $detail->deskripsi_event }}">
+    <meta property="og:image" content="{{ asset($detail->benner_event) }}">
+    <meta property="og:url" content="{{ url('event/' . $detail->url_event) }}">
+    <meta property="og:type" content="website">
+@endsection
 @section('content')
     {{-- <style>
         @media screen and (max-width: 992px) {
@@ -19,17 +27,37 @@
 
     @include('user.layouts.menu_event')
 
+    <style>
+        #leaderboard,
+        .row {
+            overflow: visible !important;
+        }
+
+        .sticky-mobile-search {
+            position: sticky;
+            top: 80px;
+            /* sesuaikan dengan tinggi header */
+            z-index: 1040;
+            /* lebih rendah dari header, lebih tinggi dari konten */
+            background-color: #fff;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        @media (max-width: 576px) {
+            .kandidat-item {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+
+            .vote-card {
+                border-radius: 0;
+            }
+        }
+    </style>
 
     <div class="row mx-0 px-0 justify-content-center mt-5 mb-5">
         <div class="col-12 col-xl-8">
-            {{-- <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Home</a></li>
-                    <li class="breadcrumb-item"><a href="{{ url('/vote') }}">Vote</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $detail->nama_event }}</li>
-                </ol>
-            </nav> --}}
-
 
             <div class="w-100 text-center">
                 <nav class="nav" style="margin-top: 50px">
@@ -71,31 +99,163 @@
                         </div>
 
                         {{-- backup top 3 --}}
+                        <div class="divider-card"></div>
+                        <div class="d-flex bg-gold flex-column justify-content-center align-items-center text-white text-center w-100 p-3"
+                            style="gap: 0.5rem;">
+                            <img src="https://kreenconnect.com/image/icon-vote/Blue/crown-icon.svg" alt="leaderboard">
+                            Leaderboard <br>{{ $detail->nama_event }}
+                        </div>
 
+                        <div class="top-3 d-flex justify-content-center">
+                            @php
+                                $first = $toptiga->get(0);
+                                $second = $toptiga->get(1);
+                                $third = $toptiga->get(2);
+                            @endphp
+
+                            <div class="top-3 d-flex justify-content-center">
+
+                                {{-- Juara 2 --}}
+                                <div class="d-flex align-items-center flex-column justify-content-center bg-white card-top3-2 juara-2"
+                                    style="position: relative; z-index: 2; border: 1.76px solid rgb(215 169 16); flex-basis: 33.33%; opacity: 1; cursor: pointer;">
+                                    <div class="info-juara-2 info-juara">
+                                        <div class="d-flex align-items-center justify-content-center mb-5"
+                                            style="position: relative;">
+                                            <div class="d-flex flex-column justify-content-center align-items-center top3-1 banner-juara-2"
+                                                style="gap: 0.75rem; position: relative;">
+                                                <img style="max-width: 6.125rem;"
+                                                    src="https://kreenconnect.com/image/silver_crown.png" alt="crown">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <img loading="lazy" src="{{ asset($second->foto_kandidat) }}"
+                                                        style="aspect-ratio: 1/1; width: 80%; object-fit: cover; max-width: 300px; border-radius: 6px; border: none;"
+                                                        alt="{{ $second->nama_kandidat }}">
+                                                    <div class="rank-top3" style="background: rgba(174, 174, 174, 1);">
+                                                        <span
+                                                            style="transform: rotate(-45deg); color: #fff; font-size: 0.875rem; font-weight: 600;">2</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mb-3 text-clamp-2"
+                                            style="font-size: 1rem; font-weight: 700; padding: 0 0.5rem; height: 3rem;">
+                                            {{ strtoupper($second->nama_kandidat) }}
+                                        </div>
+                                        <div class="text-center mb-3" style="font-size: 1.5rem; font-weight: 700;">
+                                            {{ $second->persentase_vote }}%
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-2-wrapper"
+                                        style="opacity: 1; pointer-events: auto">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-2">
+                                            Vote
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {{-- Juara 1 --}}
+                                <div class="d-flex align-items-center flex-column justify-content-center bg-white card-top3-1 juara-1"
+                                    style="position: relative; z-index: 3; border: 1.76px solid rgb(215 169 16); flex-basis: 33.33%; opacity: 1; cursor: pointer;">
+                                    <div class="info-juara-1 info-juara">
+                                        <div class="d-flex align-items-center justify-content-center mb-5"
+                                            style="position: relative;">
+                                            <div class="d-flex flex-column justify-content-center align-items-center top3-2 banner-juara-1"
+                                                style="gap: 0.75rem; position: relative;">
+                                                <img style="max-width: 6.125rem;"
+                                                    src="https://kreenconnect.com/image/gold_crown.gif" alt="crown">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <img loading="lazy" src="{{ asset($first->foto_kandidat) }}"
+                                                        style="aspect-ratio: 1/1; width: 100%; object-fit: cover; max-width: 300px; border-radius: 8px; border: 1.6px solid rgba(255, 170, 0, 1);"
+                                                        alt="{{ $first->nama_kandidat }}">
+                                                    <div class="rank-top3" style="background: rgb(255, 170, 0);">
+                                                        <span
+                                                            style="transform: rotate(-45deg); color: #fff; font-size: 0.875rem; font-weight: 600;">1</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mb-3 text-clamp-2"
+                                            style="font-size: 1rem; font-weight: 700; padding: 0 0.5rem; height: 3rem;">
+                                            {{ strtoupper($first->nama_kandidat) }}
+                                        </div>
+                                        <div class="text-center mb-3" style="font-size: 1.5rem; font-weight: 700;">
+                                            {{ $first->persentase_vote }}%
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-1-wrapper"
+                                        style="opacity: 1; pointer-events: auto">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-1">
+                                            Vote
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {{-- Juara 3 --}}
+                                <div class="d-flex align-items-center flex-column justify-content-center bg-white card-top3-3 juara-3"
+                                    style="position: relative; z-index: 1; border: 1.76px solid rgb(215 169 16); flex-basis: 33.33%; opacity: 1; cursor: pointer;">
+                                    <div class="info-juara-3 info-juara">
+                                        <div class="d-flex align-items-center justify-content-center mb-5"
+                                            style="position: relative;">
+                                            <div class="d-flex flex-column justify-content-center align-items-center top3-3 banner-juara-3"
+                                                style="gap: 0.75rem; position: relative;">
+                                                <img style="max-width: 6.125rem;"
+                                                    src="https://kreenconnect.com/image/bronze_crown.png" alt="crown">
+                                                <div class="d-flex align-items-center justify-content-center">
+                                                    <img loading="lazy" src="{{ asset($third->foto_kandidat) }}"
+                                                        style="aspect-ratio: 1/1; width: 80%; object-fit: cover; max-width: 300px; border-radius: 6px; border: none;"
+                                                        alt="{{ $third->nama_kandidat }}">
+                                                    <div class="rank-top3" style="background: rgba(195, 126, 82, 1);">
+                                                        <span
+                                                            style="transform: rotate(-45deg); color: #fff; font-size: 0.875rem; font-weight: 600;">3</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-center mb-3 text-clamp-2"
+                                            style="font-size: 1rem; font-weight: 700; padding: 0 0.5rem; height: 3rem;">
+                                            {{ strtoupper($third->nama_kandidat) }}
+                                        </div>
+                                        <div class="text-center mb-3" style="font-size: 1.5rem; font-weight: 700;">
+                                            {{ $third->persentase_vote }}%
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center btn-vote-juara-wrapper btn-vote-juara-3-wrapper"
+                                        style="opacity: 1; pointer-events: auto">
+                                        <button type="button" class="btn btn-gold px-0 btn-vote-juara btn-vote-juara-3">
+                                            Vote
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
 
                         <div class="divider-card"></div>
 
                         {{-- finalis --}}
 
                         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="leaderboard">
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-3 sticky-mobile-search shadow-sm">
                                 <span class="input-group-text" id="basic-addon1"><span
                                         class="mdi mdi-magnify"></span></span>
                                 <input type="text" class="form-control" placeholder="Cari Finalis..."
                                     aria-label="fanalis" id="cari" aria-describedby="basic-addon1">
                             </div>
+
                             <div id="notFoundAlert" class="alert alert-warning w-100 text-center" style="display: none;">
                                 Finalis tidak ditemukan.
                             </div>
 
                             @foreach ($finalis as $get)
-                                <div class="col-sm-6 col-md-6 col-lg-6 col-xl-4 col-xxl-4 kandidat-item"
+                                <div class="col-sm-6 col-md-6 col-lg-6 kandidat-item"
                                     data-nama="{{ strtolower($get->nama_kandidat) }}">
                                     <div class="vote-card p-3">
                                         <img src="{{ asset($get->foto_kandidat) }}" class="vote-img" alt="">
                                         <div class="card-body text-center">
-                                            <h6 class="card-title mt-3 mb-1">{{ $get->nama_kandidat }}</h6>
-                                            <p>({{ $get->no_kandidat }})</p>
+                                            <h6 class="card-title mt-3 mb-0">{{ $get->nama_kandidat }}</h6>
+                                            <small class="text-muted"
+                                                style="font-size:10px">{{ $get->biografi_kandidat }}</small>
+                                            <p class="mt-3">({{ $get->no_kandidat }})</p>
 
                                             <div class="w-100 mt-auto mb-3"
                                                 style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: center;">
@@ -123,7 +283,8 @@
                                             </div>
 
                                             <button class="btn btn-gold btn-sm w-100 mt-3" data-bs-toggle="modal"
-                                                data-bs-target="#mdkandidat{{ $get->id_kandidat }}">Detail Finalis</button>
+                                                data-bs-target="#mdkandidat{{ $get->id_kandidat }}">Detail
+                                                Finalis</button>
                                             <div class="quantity-selector mt-2" data-id="{{ $get->id_kandidat }}"
                                                 data-name="{{ $get->nama_kandidat }}"
                                                 data-harga="{{ $detail->harga_event }}">
@@ -342,9 +503,6 @@
                             </div>
                         </div>
 
-
-
-
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-gold">Konfirmasi Pembayaran</button>
@@ -354,7 +512,6 @@
         </div>
     </div>
 @endsection
-
 
 @section('script')
     <script>

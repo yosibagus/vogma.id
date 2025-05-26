@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class VotersModel extends Model
 {
@@ -30,5 +31,12 @@ class VotersModel extends Model
     public function kandidat()
     {
         return $this->belongsTo(FinalisModel::class, 'kandidat_id', 'id_kandidat');
+    }
+
+    public static function getDataVotes($orderId)
+    {
+        $data = DB::table('event_votes')
+            ->join('event_kandidat', 'event_votes.kandidat_id', 'event_kandidat.id_kandidat')->where('token_vote', $orderId);
+        return $data;
     }
 }
