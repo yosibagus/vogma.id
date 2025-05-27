@@ -325,6 +325,33 @@
                             @endforeach
                         </div>
 
+                        <div class="divider-card"></div>
+
+                        {{-- pesan --}}
+                        <div id="pesan-masuk"
+                            class="d-flex bg-gold flex-column justify-content-center align-items-center text-white w-100 py-3 mb-2">
+                            Pesan Voters
+                        </div>
+
+                        @forelse ($pesan as $get)
+                            <div class="card-custom mb-2">
+                                <div class="mb-3">
+                                    <div style="font-weight: 500;">
+                                        {{ $get['anonim'] == 'true' ? substr($get['nama'], 0, 1) . str_repeat('*', strlen($get['nama']) - 1) : $get['nama'] }}
+                                    </div>
+                                    <div style="font-size: 0.875rem;">
+                                        {{ $get['tgl'] }} WIB
+
+                                    </div>
+                                </div>
+                                <div>{{ $get['pesan'] }}</div>
+                            </div>
+                        @empty
+                            <div class="alert alert-warning text-center" role="alert">
+                                Belum ada pesan yang masuk.
+                            </div>
+                        @endforelse
+
                     </div>
                 </section>
 

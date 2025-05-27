@@ -40,4 +40,14 @@ class VotersModel extends Model
             ->join('event_kandidat', 'event_votes.kandidat_id', 'event_kandidat.id_kandidat')->where('token_vote', $orderId);
         return $data;
     }
+
+    public static function getDataPesan($event_id)
+    {
+        $data = DB::table('event_votes')
+            ->where('event_id', $event_id)
+            ->whereIn('status_vote', ['ok', 'free-ok'])
+            ->whereNotNull('pesan_voters')
+            ->get();
+        return $data;
+    }
 }

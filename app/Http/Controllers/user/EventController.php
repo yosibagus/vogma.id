@@ -30,6 +30,7 @@ class EventController extends Controller
         $data['penyelenggara'] = PenyelenggaraModel::where('id_penyelenggara', $data['detail']->penyelenggara_id)->first();
         $data['finalis'] = $this->_getDataFinalis($data['detail']->id_event);
         $data['toptiga'] = $this->_getTop3Finalis($data['detail']->id_event);
+        $data['pesan'] = $this->_getDataPesan($data['detail']->id_event);
         return view('user.event.event_detail', $data);
     }
 
@@ -37,6 +38,27 @@ class EventController extends Controller
     {
         $detail = FinalisModel::where('id_kandidat', $id)->first();
         return view('user.event.event_kandidat', compact('detail'));
+    }
+
+    private function _getDataPesan($event)
+    {
+        $data = VotersModel::where('event_id', $event)
+            ->whereIn('status_vote', ['ok', 'free-ok'])
+            ->whereNotNull('pesan_voters')
+            ->get();
+
+        $row = [];
+
+        foreach ($data as $get) {
+            $orang = VotersDetailModel::where('token_vote', $get->token_vote)->first();
+            $row[] = [
+                'pesan' => $get->pesan_voters,
+                'anonim' => $get->anonim,
+                'nama' => $orang->nama_voters,
+                'tgl' => tanggal($get->created_at)
+            ];
+        }
+        return $row;
     }
 
     private function _getDataFinalis($idEvent)
