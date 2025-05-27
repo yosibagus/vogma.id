@@ -105,3 +105,4 @@ Route::get('/vote/status', [EventController::class, 'status']);
 Route::get('/vote/statusExpire', [EventController::class, 'statusExpire']);
 
 Route::post('/get-snap-token', [EventController::class, 'getSnapToken']);
+Route::post('/kirim-pesan', [EventController::class, 'kirimPesan']);

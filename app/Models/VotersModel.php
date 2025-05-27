@@ -20,7 +20,8 @@ class VotersModel extends Model
         'event_id',
         'kuantitas_vote',
         'total_harga_vote',
-        'pesan_voters'
+        'pesan_voters',
+        'anonim'
     ];
 
     public function event()

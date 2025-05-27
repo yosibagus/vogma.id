@@ -25,6 +25,7 @@
 @endif
 @if ($status->transaction_status == 'settlement')
     <div class="text-center">
+        <input type="text" hidden value="{{ $status->order_id }}" id="order_id">
         <h6 class="mb-0">Terimakasih</h3>
             <small class="text-muted">Pembayaran berhasil, suara anda sudah masuk ke dalam perhitungan kandidat</small>
             <hr>
@@ -36,7 +37,7 @@
             <div class="row g-3">
                 <!-- Card "Ya" -->
                 <div class="col-6">
-                    <input type="radio" class="btn-check" name="jawaban" id="jawabanYa" value="ya"
+                    <input type="radio" class="btn-check" name="jawaban" id="jawabanYa" value="true"
                         autocomplete="off">
                     <label class="card p-2 text-center border rounded-3" style="cursor: pointer" for="jawabanYa" id="labelYa">
                         <span>Ya</span>
@@ -45,13 +46,13 @@
 
                 <!-- Card "Tidak" -->
                 <div class="col-6">
-                    <input type="radio" class="btn-check" name="jawaban" id="jawabanTidak" value="tidak"
+                    <input type="radio" class="btn-check" name="jawaban" id="jawabanTidak" value="false"
                         autocomplete="off">
                     <label class="card p-2 text-center border rounded-3" style="cursor: pointer" for="jawabanTidak" id="labelTidak">
                         <span>Tidak</span>
                     </label>
                 </div>
             </div>
-            <button class="mt-3 btn btn-gold w-100">Kirim Pesan</button>
+            <button class="mt-3 btn btn-gold w-100 btn-kirim-pesan">Kirim Pesan</button>
     </div>
 @endif

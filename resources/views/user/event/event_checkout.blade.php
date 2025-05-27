@@ -217,7 +217,6 @@
                             </tbody>
                         </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -414,6 +413,44 @@
                     },
                     success: function(response) {
                         modalBody.html(response);
+                        $(".btn-kirim-pesan").on('click', function() {
+                            var orderId = $("#order_id").val();
+                            var pesan = $("#pesan").val();
+                            var jawaban = $("input[name='jawaban']:checked").val();
+
+                            if (!pesan) {
+                                alert("Silakan isi pesan terlebih dahulu.");
+                                return;
+                            }
+
+                            if (!jawaban) {
+                                alert("Silakan pilih apakah ingin menyembunyikan identitas.");
+                                return;
+                            }
+
+                            $.ajax({
+                                url: "{{ url('/kirim-pesan') }}",
+                                method: 'POST',
+                                data: {
+                                    _token: '{{ csrf_token() }}',
+                                    order_id: orderId,
+                                    pesan: pesan,
+                                    anonim: jawaban
+                                },
+                                success: function(response) {
+                                    alert('Pesan Berhasil Dikirim');
+                                    $("#pesan").val('');
+                                    $("input[name='jawaban']").prop('checked',
+                                        false);
+                                    $("#statusModal").modal('hide');
+                                },
+                                error: function(xhr, status, error) {
+                                    alert("Terjadi kesalahan saat mengirim pesan.");
+                                    console.error(xhr.responseText);
+                                }
+                            });
+                        });
+
                     },
                     error: function() {
                         modalBody.html(
@@ -421,6 +458,9 @@
                     }
                 });
             }
+
+
+
         });
     </script>
 

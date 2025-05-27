@@ -318,4 +318,18 @@ class EventController extends Controller
 
         return response()->json($status);
     }
+
+    public function kirimPesan(Request $request)
+    {
+        $orderId = $request->order_id;
+        $pesan = $request->pesan;
+        $anonim = $request->anonim;
+
+        $data = [
+            'pesan_voters' => $pesan,
+            'anonim' => $anonim
+        ];
+
+        VotersModel::where('token_vote', $orderId)->update($data);
+    }
 }
